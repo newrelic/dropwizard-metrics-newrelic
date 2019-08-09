@@ -1,1 +1,1 @@
-rootProject.name = "metrics-newrelic"
+rootProject.name = "dropwizard-metrics-newrelic"
