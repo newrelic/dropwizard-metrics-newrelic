@@ -7,15 +7,23 @@ A [Dropwizard metrics](https://metrics.dropwizard.io/4.0.0/) reporter for sendin
 
 `build.gradle:`
 ```
-compile("com.newrelic.telemetry:dropwizard-metrics-newrelic:0.1.0-SNAPSHOT")
+compile("com.newrelic.telemetry:dropwizard-metrics-newrelic:0.1.0")
+compile("com.newrelic.telemetry:telemetry-components:0.2.0")
 ```
 
 or if you're using kotlin build gradle...
 
 `build.gradle.kts:`
 ```
-implementation("com.newrelic.telemetry:dropwizard-metrics-newrelic:0.1.0-SNAPSHOT")
+implementation("com.newrelic.telemetry:dropwizard-metrics-newrelic:0.1.0")
+implementation("com.newrelic.telemetry:telemetry-components:0.2.0")
 ```
+
+Note: to use the sample code below, you will need the `telemetry-components` library mentioned above. It provides
+implementations for generating JSON and communicating via HTTP using the gson and okhttp libraries, respectively.
+If you do not want to depend on those libraries, you can elide the dependency on `telemetry-components`, 
+but you will need to construct a `MetricBatchSender` instance with your
+own implementations of the `com.newrelic.telemetry.http.HttpPoster` and `com.newrelic.telemetry.MetricJsonGenerator` interfaces.
 
 ## start the reporter
 
