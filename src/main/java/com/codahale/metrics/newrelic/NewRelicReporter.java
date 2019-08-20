@@ -29,7 +29,7 @@ import com.newrelic.telemetry.Attributes;
 import com.newrelic.telemetry.Metric;
 import com.newrelic.telemetry.MetricBatch;
 import com.newrelic.telemetry.MetricBatchSender;
-import com.newrelic.telemetry.RetryingTelemetrySender;
+import com.newrelic.telemetry.TelemetryClient;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
@@ -41,7 +41,7 @@ import java.util.stream.Stream;
 public class NewRelicReporter extends ScheduledReporter {
 
   private final TimeTracker timeTracker;
-  private final RetryingTelemetrySender sender;
+  private final TelemetryClient sender;
   private final Attributes commonAttributes;
   private final HistogramTransformer histogramTransformer;
   private final GaugeTransformer gaugeTransformer;
@@ -57,7 +57,7 @@ public class NewRelicReporter extends ScheduledReporter {
       MetricFilter filter,
       TimeUnit rateUnit,
       TimeUnit durationUnit,
-      RetryingTelemetrySender sender,
+      TelemetryClient sender,
       Attributes commonAttributes,
       HistogramTransformer histogramTransformer,
       GaugeTransformer gaugeTransformer,
@@ -116,7 +116,7 @@ public class NewRelicReporter extends ScheduledReporter {
             .flatMap(identity())
             .collect(toList());
 
-    sender.send(new MetricBatch(metrics, commonAttributes));
+    sender.sendBatch(new MetricBatch(metrics, commonAttributes));
     // set the previous harvest time in the tracker.
     timeTracker.tick();
   }
