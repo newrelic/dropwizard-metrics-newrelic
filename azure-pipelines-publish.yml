@@ -28,7 +28,6 @@ steps:
     cp $(gradleprops.secureFilePath) ~/.gradle/
     echo Done!
 
-
 - task: Gradle@2
   inputs:
     workingDirectory: ''
@@ -39,4 +38,4 @@ steps:
     jdkArchitectureOption: 'x64'
     publishJUnitResults: true
     testResultsFiles: '**/TEST-*.xml'
-    tasks: 'uploadSonatype'
+    tasks: 'check publish'

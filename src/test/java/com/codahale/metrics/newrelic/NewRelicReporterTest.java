@@ -23,7 +23,7 @@ import com.newrelic.telemetry.Attributes;
 import com.newrelic.telemetry.Gauge;
 import com.newrelic.telemetry.Metric;
 import com.newrelic.telemetry.MetricBatch;
-import com.newrelic.telemetry.RetryingTelemetrySender;
+import com.newrelic.telemetry.TelemetryClient;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.concurrent.TimeUnit;
@@ -34,7 +34,7 @@ class NewRelicReporterTest {
 
   private Attributes commonAttributes;
   private TimeTracker timeTracker;
-  private RetryingTelemetrySender sender;
+  private TelemetryClient sender;
   private GaugeTransformer gaugeTransformer;
   private HistogramTransformer histogramTransformer;
   private CounterTransformer counterTransformer;
@@ -50,7 +50,7 @@ class NewRelicReporterTest {
     counterTransformer = mock(CounterTransformer.class);
     meterTransformer = mock(MeterTransformer.class);
     timerTransformer = mock(TimerTransformer.class);
-    sender = mock(RetryingTelemetrySender.class);
+    sender = mock(TelemetryClient.class);
     timeTracker = mock(TimeTracker.class);
   }
 
@@ -93,7 +93,7 @@ class NewRelicReporterTest {
         testData.meters(),
         testData.timers());
 
-    verify(sender).send(expectedBatch);
+    verify(sender).sendBatch(expectedBatch);
     verify(timeTracker).tick();
   }
 

@@ -18,7 +18,7 @@ import com.codahale.metrics.newrelic.transformer.TimerTransformer;
 import com.codahale.metrics.newrelic.util.TimeTracker;
 import com.newrelic.telemetry.Attributes;
 import com.newrelic.telemetry.MetricBatchSender;
-import com.newrelic.telemetry.RetryingTelemetrySender;
+import com.newrelic.telemetry.TelemetryClient;
 import java.util.concurrent.TimeUnit;
 
 public class NewRelicReporterBuilder {
@@ -85,7 +85,7 @@ public class NewRelicReporterBuilder {
         filter,
         rateUnit,
         durationUnit,
-        new RetryingTelemetrySender(metricBatchSender),
+        new TelemetryClient(metricBatchSender),
         commonAttributes,
         histogramTransformer,
         gaugeTransformer,
