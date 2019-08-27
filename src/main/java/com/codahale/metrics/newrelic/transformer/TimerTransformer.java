@@ -23,7 +23,7 @@ import java.util.stream.Stream;
 public class TimerTransformer implements DropWizardMetricTransformer<Timer> {
 
   static final Supplier<Attributes> ATTRIBUTES_SUPPLIER =
-      () -> new Attributes().put("sourceType", "timer");
+      () -> new Attributes().put("source.type", "timer");
 
   private final SamplingTransformer samplingTransformer;
   private final MeteredTransformer meteredTransformer;
