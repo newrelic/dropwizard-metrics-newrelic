@@ -77,7 +77,7 @@ public class SamplingTransformer implements DropWizardComponentTransformer<Sampl
   }
 
   private Attributes buildAttributes(Attributes baseAttributes, Double percentile) {
-    return baseAttributes.put("percentile", percentile * 100d).put("groupingAs", "percentiles");
+    return baseAttributes.put("newRelic.percentile", percentile * 100d).put("groupingAs", "percentiles");
   }
 
   private double calculateSum(Snapshot snapshot) {

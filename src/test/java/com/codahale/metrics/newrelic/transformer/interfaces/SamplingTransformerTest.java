@@ -143,6 +143,6 @@ class SamplingTransformerTest {
   }
 
   private Attributes percentileAttributes(double percentile) {
-    return new Attributes().put("percentile", percentile).put("groupingAs", "percentiles");
+    return new Attributes().put("newRelic.percentile", percentile).put("groupingAs", "percentiles");
   }
 }
