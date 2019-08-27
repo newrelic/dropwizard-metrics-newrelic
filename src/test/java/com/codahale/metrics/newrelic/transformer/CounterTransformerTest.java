@@ -24,7 +24,7 @@ import org.junit.jupiter.api.Test;
 class CounterTransformerTest {
 
   private static final String COUNTER_NAME = "countme";
-  private static final Attributes EMPTY_ATTRIBUTES = new Attributes().put("sourceType", "counter");
+  private static final Attributes EMPTY_ATTRIBUTES = new Attributes().put("source.type", "counter");
   private static final long timestamp = System.currentTimeMillis();
   private Clock clock;
 

@@ -36,6 +36,6 @@ public class CounterTransformer implements DropWizardMetricTransformer<Counter> 
             name,
             counter.getCount(),
             clock.getTime(),
-            new Attributes().put("sourceType", "counter")));
+            new Attributes().put("source.type", "counter")));
   }
 }

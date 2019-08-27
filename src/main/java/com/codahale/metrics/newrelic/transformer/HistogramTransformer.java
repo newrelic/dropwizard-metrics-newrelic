@@ -22,7 +22,7 @@ import java.util.function.Supplier;
 public class HistogramTransformer implements DropWizardMetricTransformer<Histogram> {
 
   static final Supplier<Attributes> ATTRIBUTES_SUPPLIER =
-      () -> new Attributes().put("sourceType", "histogram");
+      () -> new Attributes().put("source.type", "histogram");
 
   private final CountingTransformer countingTransformer;
   private final SamplingTransformer samplingTransformer;
