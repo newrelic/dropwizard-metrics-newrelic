@@ -52,7 +52,7 @@ public class SamplingTransformer implements DropWizardComponentTransformer<Sampl
 
     Gauge median =
         new Gauge(
-            name,
+            name + ".percentiles",
             scaleDoubleValue(snapshot.getMedian()),
             now,
             buildAttributes(baseAttributes.get(), .50).put("commonName", "median"));
@@ -61,7 +61,7 @@ public class SamplingTransformer implements DropWizardComponentTransformer<Sampl
             .map(
                 percentile ->
                     new Gauge(
-                        name,
+                        name + ".percentiles",
                         scaleDoubleValue(snapshot.getValue(percentile)),
                         now,
                         buildAttributes(baseAttributes.get(), percentile)));
@@ -78,8 +78,7 @@ public class SamplingTransformer implements DropWizardComponentTransformer<Sampl
 
   private Attributes buildAttributes(Attributes baseAttributes, Double percentile) {
     return baseAttributes
-        .put("newRelic.percentile", percentile * 100d)
-        .put("groupingAs", "percentiles");
+        .put("newRelic.percentile", percentile * 100d);
   }
 
   private double calculateSum(Snapshot snapshot) {

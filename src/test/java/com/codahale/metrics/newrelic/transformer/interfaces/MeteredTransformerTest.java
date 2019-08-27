@@ -54,10 +54,10 @@ class MeteredTransformerTest {
     meter.mark();
     meter.mark(10);
 
-    Gauge mean = new Gauge(METER_NAME, 1000, timestamp, attributeTo(MEAN_RATE));
-    Gauge oneMinuteRate = new Gauge(METER_NAME, 2000, timestamp, attributeTo(M1_RATE));
-    Gauge fiveMinuteRate = new Gauge(METER_NAME, 3000, timestamp, attributeTo(M5_RATE));
-    Gauge fifteenMinuteRate = new Gauge(METER_NAME, 4000, timestamp, attributeTo(M15_RATE));
+    Gauge mean = new Gauge(METER_NAME + ".rates", 1000, timestamp, attributeTo(MEAN_RATE));
+    Gauge oneMinuteRate = new Gauge(METER_NAME + ".rates", 2000, timestamp, attributeTo(M1_RATE));
+    Gauge fiveMinuteRate = new Gauge(METER_NAME + ".rates", 3000, timestamp, attributeTo(M5_RATE));
+    Gauge fifteenMinuteRate = new Gauge(METER_NAME + ".rates", 4000, timestamp, attributeTo(M15_RATE));
 
     Collection<Metric> expectedMetrics =
         Stream.of(mean, oneMinuteRate, fiveMinuteRate, fifteenMinuteRate).collect(toSet());
@@ -72,6 +72,6 @@ class MeteredTransformerTest {
   }
 
   private Attributes attributeTo(MetricAttribute attribute) {
-    return new Attributes().put("rate", attribute.getCode()).put("groupingAs", "rates");
+    return new Attributes().put("rate", attribute.getCode());
   }
 }

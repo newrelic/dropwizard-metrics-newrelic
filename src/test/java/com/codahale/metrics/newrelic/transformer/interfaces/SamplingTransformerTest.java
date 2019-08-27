@@ -48,20 +48,20 @@ class SamplingTransformerTest {
         Sets.newSet(
             new Summary("blobby", 6, 23, .3, .5, now, now, new Attributes()),
             new Gauge(
-                "blobby",
+                "blobby.percentiles",
                 snapshot.getMedian() / 10d,
                 now,
                 percentileAttributes(50.0).put("commonName", "median")),
             new Gauge(
-                "blobby", 0.1d * snapshot.get75thPercentile(), now, percentileAttributes(75.0)),
+                "blobby.percentiles", 0.1d * snapshot.get75thPercentile(), now, percentileAttributes(75.0)),
             new Gauge(
-                "blobby", 0.1d * snapshot.get95thPercentile(), now, percentileAttributes(95.0)),
+                "blobby.percentiles", 0.1d * snapshot.get95thPercentile(), now, percentileAttributes(95.0)),
             new Gauge(
-                "blobby", 0.1d * snapshot.get98thPercentile(), now, percentileAttributes(98.0)),
+                "blobby.percentiles", 0.1d * snapshot.get98thPercentile(), now, percentileAttributes(98.0)),
             new Gauge(
-                "blobby", 0.1d * snapshot.get99thPercentile(), now, percentileAttributes(99.0)),
+                "blobby.percentiles", 0.1d * snapshot.get99thPercentile(), now, percentileAttributes(99.0)),
             new Gauge(
-                "blobby", 0.1d * snapshot.get999thPercentile(), now, percentileAttributes(99.9)));
+                "blobby.percentiles", 0.1d * snapshot.get999thPercentile(), now, percentileAttributes(99.9)));
 
     Clock clock = mock(Clock.class);
 
@@ -101,32 +101,32 @@ class SamplingTransformerTest {
         Sets.newSet(
             new Summary("hollerMonkey", 10, 40, 3 * 10, 5 * 10, now, later, new Attributes()),
             new Gauge(
-                "hollerMonkey",
+                "hollerMonkey.percentiles",
                 snapshot.getMedian() * 10,
                 later,
                 percentileAttributes(50.0).put("commonName", "median")),
             new Gauge(
-                "hollerMonkey",
+                "hollerMonkey.percentiles",
                 snapshot.get75thPercentile() * 10,
                 later,
                 percentileAttributes(75.0)),
             new Gauge(
-                "hollerMonkey",
+                "hollerMonkey.percentiles",
                 snapshot.get95thPercentile() * 10,
                 later,
                 percentileAttributes(95.0)),
             new Gauge(
-                "hollerMonkey",
+                "hollerMonkey.percentiles",
                 snapshot.get98thPercentile() * 10,
                 later,
                 percentileAttributes(98.0)),
             new Gauge(
-                "hollerMonkey",
+                "hollerMonkey.percentiles",
                 snapshot.get99thPercentile() * 10,
                 later,
                 percentileAttributes(99.0)),
             new Gauge(
-                "hollerMonkey",
+                "hollerMonkey.percentiles",
                 snapshot.get999thPercentile() * 10,
                 later,
                 percentileAttributes(99.9)));
@@ -143,6 +143,6 @@ class SamplingTransformerTest {
   }
 
   private Attributes percentileAttributes(double percentile) {
-    return new Attributes().put("newRelic.percentile", percentile).put("groupingAs", "percentiles");
+    return new Attributes().put("newRelic.percentile", percentile);
   }
 }

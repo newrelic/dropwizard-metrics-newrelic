@@ -39,30 +39,31 @@ public class MeteredTransformer implements DropWizardComponentTransformer<Metere
       String name, Metered metered, Supplier<Attributes> baseAttributes) {
     long timestamp = clock.getTime();
 
+    String ratesName = name + ".rates";
     Gauge mean =
         makeGauge(
-            name,
+            ratesName,
             timestamp,
             convertRate(metered.getMeanRate()),
             MetricAttribute.MEAN_RATE,
             baseAttributes);
     Gauge oneMinuteRate =
         makeGauge(
-            name,
+            ratesName,
             timestamp,
             convertRate(metered.getOneMinuteRate()),
             MetricAttribute.M1_RATE,
             baseAttributes);
     Gauge fiveMinuteRate =
         makeGauge(
-            name,
+            ratesName,
             timestamp,
             convertRate(metered.getFiveMinuteRate()),
             MetricAttribute.M5_RATE,
             baseAttributes);
     Gauge fifteenMinuteRate =
         makeGauge(
-            name,
+            ratesName,
             timestamp,
             convertRate(metered.getFifteenMinuteRate()),
             MetricAttribute.M15_RATE,
@@ -85,6 +86,6 @@ public class MeteredTransformer implements DropWizardComponentTransformer<Metere
         name,
         count,
         timestamp,
-        attributes.get().put("rate", attribute.getCode()).put("groupingAs", "rates"));
+        attributes.get().put("rate", attribute.getCode()));
   }
 }
