@@ -57,7 +57,8 @@ class MeteredTransformerTest {
     Gauge mean = new Gauge(METER_NAME + ".rates", 1000, timestamp, attributeTo(MEAN_RATE));
     Gauge oneMinuteRate = new Gauge(METER_NAME + ".rates", 2000, timestamp, attributeTo(M1_RATE));
     Gauge fiveMinuteRate = new Gauge(METER_NAME + ".rates", 3000, timestamp, attributeTo(M5_RATE));
-    Gauge fifteenMinuteRate = new Gauge(METER_NAME + ".rates", 4000, timestamp, attributeTo(M15_RATE));
+    Gauge fifteenMinuteRate =
+        new Gauge(METER_NAME + ".rates", 4000, timestamp, attributeTo(M15_RATE));
 
     Collection<Metric> expectedMetrics =
         Stream.of(mean, oneMinuteRate, fiveMinuteRate, fifteenMinuteRate).collect(toSet());

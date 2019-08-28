@@ -82,10 +82,6 @@ public class MeteredTransformer implements DropWizardComponentTransformer<Metere
       double count,
       MetricAttribute attribute,
       Supplier<Attributes> attributes) {
-    return new Gauge(
-        name,
-        count,
-        timestamp,
-        attributes.get().put("rate", attribute.getCode()));
+    return new Gauge(name, count, timestamp, attributes.get().put("rate", attribute.getCode()));
   }
 }

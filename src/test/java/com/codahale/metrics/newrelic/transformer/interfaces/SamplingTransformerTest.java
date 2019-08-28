@@ -53,15 +53,30 @@ class SamplingTransformerTest {
                 now,
                 percentileAttributes(50.0).put("commonName", "median")),
             new Gauge(
-                "blobby.percentiles", 0.1d * snapshot.get75thPercentile(), now, percentileAttributes(75.0)),
+                "blobby.percentiles",
+                0.1d * snapshot.get75thPercentile(),
+                now,
+                percentileAttributes(75.0)),
             new Gauge(
-                "blobby.percentiles", 0.1d * snapshot.get95thPercentile(), now, percentileAttributes(95.0)),
+                "blobby.percentiles",
+                0.1d * snapshot.get95thPercentile(),
+                now,
+                percentileAttributes(95.0)),
             new Gauge(
-                "blobby.percentiles", 0.1d * snapshot.get98thPercentile(), now, percentileAttributes(98.0)),
+                "blobby.percentiles",
+                0.1d * snapshot.get98thPercentile(),
+                now,
+                percentileAttributes(98.0)),
             new Gauge(
-                "blobby.percentiles", 0.1d * snapshot.get99thPercentile(), now, percentileAttributes(99.0)),
+                "blobby.percentiles",
+                0.1d * snapshot.get99thPercentile(),
+                now,
+                percentileAttributes(99.0)),
             new Gauge(
-                "blobby.percentiles", 0.1d * snapshot.get999thPercentile(), now, percentileAttributes(99.9)));
+                "blobby.percentiles",
+                0.1d * snapshot.get999thPercentile(),
+                now,
+                percentileAttributes(99.9)));
 
     Clock clock = mock(Clock.class);
 
