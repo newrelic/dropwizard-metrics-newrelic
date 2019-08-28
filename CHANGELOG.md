@@ -7,5 +7,5 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 - TBD, maybe filtering attributes
 
-## [0.1.1] - 2019-09-01
+## [0.1.1] - 2019-08-26
 - Initial public release of the New Relic dimensional-metrics-based Dropwizard Reporter
