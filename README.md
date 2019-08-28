@@ -7,16 +7,16 @@ A [Dropwizard metrics](https://metrics.dropwizard.io/4.0.0/) reporter for sendin
 
 `build.gradle:`
 ```
-compile("com.newrelic.telemetry:dropwizard-metrics-newrelic:0.1.0")
-compile("com.newrelic.telemetry:telemetry-components:0.2.0")
+compile("com.newrelic.telemetry:dropwizard-metrics-newrelic:0.1.1")
+compile("com.newrelic.telemetry:telemetry-components:0.2.1")
 ```
 
 or if you're using kotlin build gradle...
 
 `build.gradle.kts:`
 ```
-implementation("com.newrelic.telemetry:dropwizard-metrics-newrelic:0.1.0")
-implementation("com.newrelic.telemetry:telemetry-components:0.2.0")
+implementation("com.newrelic.telemetry:dropwizard-metrics-newrelic:0.1.1")
+implementation("com.newrelic.telemetry:telemetry-components:0.2.1")
 ```
 
 Note: to use the sample code below, you will need the `telemetry-components` library mentioned above. It provides
