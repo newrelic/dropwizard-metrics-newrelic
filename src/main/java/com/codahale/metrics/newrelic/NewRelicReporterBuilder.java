@@ -66,13 +66,6 @@ public class NewRelicReporterBuilder {
     return this;
   }
 
-  /** Modifies and adds information about the source of metrics to the given attributes */
-  private void addDefaultSourceInformation(Attributes attributes) {
-    attributes
-        .put("instrumentation.provider", "dropwizard")
-        .put("collector.name", "dropwizard-metrics-newrelic");
-  }
-
   public NewRelicReporter build() {
     long rateFactor = rateUnit.toSeconds(1);
     double durationFactor = durationUnit.toNanos(1);
@@ -84,8 +77,6 @@ public class NewRelicReporterBuilder {
     GaugeTransformer gaugeTransformer = new GaugeTransformer();
     CounterTransformer counterTransformer = new CounterTransformer();
     HistogramTransformer histogramTransformer = HistogramTransformer.build(timeTracker);
-
-    addDefaultSourceInformation(commonAttributes);
 
     return new NewRelicReporter(
         timeTracker,
