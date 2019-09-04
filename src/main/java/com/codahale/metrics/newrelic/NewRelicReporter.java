@@ -69,7 +69,8 @@ public class NewRelicReporter extends ScheduledReporter {
     this.timeTracker = timeTracker;
     this.sender = sender;
 
-    // TODO It would be better to not mutate what was passed in Attributes should have a copy method of some sort
+    // TODO It would be better to not mutate what was passed in Attributes should have a copy method
+    // of some sort
     this.commonAttributes = commonAttributes == null ? new Attributes() : commonAttributes;
     this.commonAttributes.put("instrumentation.provider", "dropwizard");
     this.commonAttributes.put("collector.name", "dropwizard-metrics-newrelic");
