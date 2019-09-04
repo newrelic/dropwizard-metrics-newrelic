@@ -29,6 +29,7 @@ import java.util.Collection;
 import java.util.concurrent.TimeUnit;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 
 class NewRelicReporterTest {
 
@@ -60,7 +61,14 @@ class NewRelicReporterTest {
     InputTestData testData = InputTestData.build();
     ExpectedMetrics expected = ExpectedMetrics.build();
 
-    MetricBatch expectedBatch = new MetricBatch(expected.toList(), commonAttributes);
+    MetricBatch expectedBatch =
+        new MetricBatch(
+            expected.toList(),
+            new Attributes()
+                .put("name", "the best")
+                .put("foo", false)
+                .put("instrumentation.provider", "dropwizard")
+                .put("collector.name", "dropwizard-metrics-newrelic"));
 
     when(gaugeTransformer.transform("gauge", testData.gauge)).thenReturn(singleton(expected.gauge));
     when(histogramTransformer.transform("histogram", testData.histogram))
@@ -93,7 +101,9 @@ class NewRelicReporterTest {
         testData.meters(),
         testData.timers());
 
-    verify(sender).sendBatch(expectedBatch);
+    // TODO Replace this with verify(sender).sendBatch(expectedBatch) once we update SDK dependency
+    verify(sender).sendBatch(Mockito.refEq(expectedBatch));
+
     verify(timeTracker).tick();
   }
 
