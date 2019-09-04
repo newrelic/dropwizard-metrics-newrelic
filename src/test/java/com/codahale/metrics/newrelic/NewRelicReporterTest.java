@@ -27,9 +27,9 @@ import com.newrelic.telemetry.TelemetryClient;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.concurrent.TimeUnit;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 
 class NewRelicReporterTest {
 
@@ -101,11 +101,8 @@ class NewRelicReporterTest {
         testData.meters(),
         testData.timers());
 
-    // TODO We are actively failing so that this test can be looked at again once we depend on a newer version
-    //      of the telemetry SDK. Because of Lombok's annotation on the MetricBatch subclass, equals() is not sufficient.
-    //      We should re-instate the commented test once we've update the dependency for the telemetry SDK.
-    Assertions.fail();
-    // verify(sender).sendBatch(expectedBatch);
+    // TODO Replace this with verify(sender).sendBatch(expectedBatch) once we update SDK dependency
+    verify(sender).sendBatch(Mockito.refEq(expectedBatch));
 
     verify(timeTracker).tick();
   }
