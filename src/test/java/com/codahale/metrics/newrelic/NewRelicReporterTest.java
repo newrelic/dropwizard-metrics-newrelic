@@ -27,6 +27,7 @@ import com.newrelic.telemetry.TelemetryClient;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.concurrent.TimeUnit;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -60,7 +61,14 @@ class NewRelicReporterTest {
     InputTestData testData = InputTestData.build();
     ExpectedMetrics expected = ExpectedMetrics.build();
 
-    MetricBatch expectedBatch = new MetricBatch(expected.toList(), commonAttributes);
+    MetricBatch expectedBatch =
+        new MetricBatch(
+            expected.toList(),
+            new Attributes()
+                .put("name", "the best")
+                .put("foo", false)
+                .put("instrumentation.provider", "dropwizard")
+                .put("collector.name", "dropwizard-metrics-newrelic"));
 
     when(gaugeTransformer.transform("gauge", testData.gauge)).thenReturn(singleton(expected.gauge));
     when(histogramTransformer.transform("histogram", testData.histogram))
@@ -93,7 +101,12 @@ class NewRelicReporterTest {
         testData.meters(),
         testData.timers());
 
-    verify(sender).sendBatch(expectedBatch);
+    // TODO We are actively failing so that this test can be looked at again once we depend on a newer version
+    //      of the telemetry SDK. Because of Lombok's annotation on the MetricBatch subclass, equals() is not sufficient.
+    //      We should re-instate the commented test once we've update the dependency for the telemetry SDK.
+    Assertions.fail();
+    // verify(sender).sendBatch(expectedBatch);
+
     verify(timeTracker).tick();
   }
 
