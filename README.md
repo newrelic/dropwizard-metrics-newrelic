@@ -59,7 +59,8 @@ reporter.start(15, TimeUnit.SECONDS);
 ## Dropwizard Integration
 
 If you are using the actual Dropwizard REST framework, you can get a reference to the 
-`MetricRegistry` in order to register you reporter.  It might like something like this:
+`MetricRegistry` from the Dropwizard `Environment` in order to register your reporter.  
+It might look something like this:
 
 
 ```$java
