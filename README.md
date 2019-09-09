@@ -8,7 +8,7 @@ A [Dropwizard metrics](https://metrics.dropwizard.io/4.0.0/) reporter for sendin
 `build.gradle:`
 ```
 compile("com.newrelic.telemetry:dropwizard-metrics-newrelic:0.1.1")
-compile("com.newrelic.telemetry:telemetry-components:0.2.1")
+compile("com.newrelic.telemetry:telemetry-http-okhttp:0.3.0")
 ```
 
 or if you're using kotlin build gradle...
@@ -16,14 +16,20 @@ or if you're using kotlin build gradle...
 `build.gradle.kts:`
 ```
 implementation("com.newrelic.telemetry:dropwizard-metrics-newrelic:0.1.1")
-implementation("com.newrelic.telemetry:telemetry-components:0.2.1")
+implementation("com.newrelic.telemetry:telemetry-http-okhttp:0.3.0")
 ```
 
-Note: to use the sample code below, you will need the `telemetry-components` library mentioned above. It provides
-implementations for generating JSON and communicating via HTTP using the gson and okhttp libraries, respectively.
-If you do not want to depend on those libraries, you can elide the dependency on `telemetry-components`, 
-but you will need to construct a `MetricBatchSender` instance with your
-own implementations of the `com.newrelic.telemetry.http.HttpPoster` and `com.newrelic.telemetry.MetricJsonGenerator` interfaces.
+If you do not want to depend on okhttps, you can remove the dependency on `telemetry-http-okhttps`, 
+but you will need to construct a `MetricBatchSender` instance using its builder and provide your
+own implementations of the `com.newrelic.telemetry.http.HttpPoster` interface.
+
+
+```
+MetricBatchSender sender = MetricBatchSender.builder().httpPoster(<your implementation>);
+```
+
+Note: to use the sample code below, you will need the `telemetry-http-okhttps` library mentioned above. It provides
+implementations communicating via HTTP using the okhttp libraries, respectively.
 
 ## start the reporter
 
