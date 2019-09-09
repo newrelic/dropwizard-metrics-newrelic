@@ -1,7 +1,9 @@
 # New Relic Dropwizard Reporter
 A [Dropwizard metrics](https://metrics.dropwizard.io/4.0.0/) reporter for sending dimensional metrics to New Relic using the New Relic Java Telemetry SDK.
+For the juicy details on how Dropwizard metrics are mapped to New Relic dimensional metrics,
+please visit [the exporter specs documentation repo](https://github.com/newrelic/exporter-specs/tree/master/dropwizard). 
 
-# how to use
+# How To Use
 
 ## gradle
 
@@ -31,7 +33,7 @@ MetricBatchSender sender = MetricBatchSender.builder().httpPoster(<your implemen
 Note: to use the sample code below, you will need the `telemetry-http-okhttp` library mentioned above. It provides
 implementations communicating via HTTP using the okhttp libraries, respectively.
 
-## start the reporter
+## Start The Reporter
 
 Early in the lifecycle of your application, you will want to create and
 start a `NewRelicReporter`, similar to this:
@@ -53,3 +55,28 @@ NewRelicReporter reporter = NewRelicReporter.build(metricRegistry, metricBatchSe
         
 reporter.start(15, TimeUnit.SECONDS);
 ```
+
+## Dropwizard Integration
+
+If you are using the actual Dropwizard REST framework, you can get a reference to the 
+`MetricRegistry` in order to register you reporter.  It might like something like this:
+
+
+```$java
+public class MyApplication extends Application<MyConfig> {
+
+...
+    @Override
+    public void run(MyConfig configuration, Environment environment) {
+        MetricRegistry registry = environment.metrics();
+        MetricBatchSender metricBatchSender = buildMetricBatchSender(); // see above for more complete example
+        NewRelicReporter reporter = NewRelicReporter.build(registry, metricBatchSender)
+                .commonAttributes(commonAttributes)
+                .build();
+        reporter.start(15, TimeUnit.SECONDS);
+
+        ...
+    }
+...
+}
+``` 
