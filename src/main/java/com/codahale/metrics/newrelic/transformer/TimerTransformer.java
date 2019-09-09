@@ -15,7 +15,7 @@ import com.codahale.metrics.newrelic.transformer.interfaces.MeteredTransformer;
 import com.codahale.metrics.newrelic.transformer.interfaces.SamplingTransformer;
 import com.codahale.metrics.newrelic.util.TimeTracker;
 import com.newrelic.telemetry.Attributes;
-import com.newrelic.telemetry.Metric;
+import com.newrelic.telemetry.metrics.Metric;
 import java.util.Collection;
 import java.util.function.Supplier;
 import java.util.stream.Stream;

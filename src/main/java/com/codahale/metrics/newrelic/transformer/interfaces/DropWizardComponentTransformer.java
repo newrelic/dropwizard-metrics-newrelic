@@ -8,7 +8,7 @@
 package com.codahale.metrics.newrelic.transformer.interfaces;
 
 import com.newrelic.telemetry.Attributes;
-import com.newrelic.telemetry.Metric;
+import com.newrelic.telemetry.metrics.Metric;
 import java.util.Collection;
 import java.util.function.Supplier;
 

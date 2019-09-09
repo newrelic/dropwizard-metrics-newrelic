@@ -13,7 +13,7 @@ import static java.util.Collections.singleton;
 import com.codahale.metrics.Clock;
 import com.codahale.metrics.Gauge;
 import com.newrelic.telemetry.Attributes;
-import com.newrelic.telemetry.Metric;
+import com.newrelic.telemetry.metrics.Metric;
 import java.util.Collection;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -42,7 +42,7 @@ public class GaugeTransformer implements DropWizardMetricTransformer<Gauge> {
     }
     if (gaugeValue instanceof Number) {
       Metric metric =
-          new com.newrelic.telemetry.Gauge(
+          new com.newrelic.telemetry.metrics.Gauge(
               name, ((Number) gaugeValue).doubleValue(), timestamp, new Attributes());
       return singleton(metric);
     }
