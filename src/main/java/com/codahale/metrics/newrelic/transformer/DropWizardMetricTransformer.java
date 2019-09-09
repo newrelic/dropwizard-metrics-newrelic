@@ -7,7 +7,7 @@
 
 package com.codahale.metrics.newrelic.transformer;
 
-import com.newrelic.telemetry.Metric;
+import com.newrelic.telemetry.metrics.Metric;
 import java.util.Collection;
 
 public interface DropWizardMetricTransformer<T extends com.codahale.metrics.Metric>

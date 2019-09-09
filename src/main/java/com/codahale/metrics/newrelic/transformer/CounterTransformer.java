@@ -12,8 +12,8 @@ import static java.util.Collections.singleton;
 import com.codahale.metrics.Clock;
 import com.codahale.metrics.Counter;
 import com.newrelic.telemetry.Attributes;
-import com.newrelic.telemetry.Gauge;
-import com.newrelic.telemetry.Metric;
+import com.newrelic.telemetry.metrics.Gauge;
+import com.newrelic.telemetry.metrics.Metric;
 import java.util.Collection;
 
 public class CounterTransformer implements DropWizardMetricTransformer<Counter> {

@@ -18,7 +18,7 @@ import com.codahale.metrics.Gauge;
 import com.codahale.metrics.RatioGauge;
 import com.codahale.metrics.RatioGauge.Ratio;
 import com.newrelic.telemetry.Attributes;
-import com.newrelic.telemetry.Metric;
+import com.newrelic.telemetry.metrics.Metric;
 import java.math.BigDecimal;
 import java.util.Collection;
 import org.junit.jupiter.api.BeforeEach;
@@ -42,7 +42,7 @@ class GaugeTransformerTest {
     double value = 12345d;
     Gauge<Double> wizardGauge = () -> value;
     Metric expectedMetric =
-        new com.newrelic.telemetry.Gauge(GAUGE_NAME, value, timestamp, new Attributes());
+        new com.newrelic.telemetry.metrics.Gauge(GAUGE_NAME, value, timestamp, new Attributes());
 
     GaugeTransformer converter = new GaugeTransformer(clock);
 
@@ -65,7 +65,8 @@ class GaugeTransformerTest {
           }
         };
     Metric expectedMetric =
-        new com.newrelic.telemetry.Gauge(GAUGE_NAME, ratio.getValue(), timestamp, new Attributes());
+        new com.newrelic.telemetry.metrics.Gauge(
+            GAUGE_NAME, ratio.getValue(), timestamp, new Attributes());
 
     GaugeTransformer converter = new GaugeTransformer(clock);
 
@@ -108,7 +109,7 @@ class GaugeTransformerTest {
     BigDecimal value = new BigDecimal(12345d);
     Gauge<BigDecimal> wizardGauge = () -> value;
     Metric expectedMetric =
-        new com.newrelic.telemetry.Gauge(
+        new com.newrelic.telemetry.metrics.Gauge(
             GAUGE_NAME, value.doubleValue(), timestamp, new Attributes());
 
     GaugeTransformer converter = new GaugeTransformer(clock);
