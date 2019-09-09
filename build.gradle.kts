@@ -33,7 +33,7 @@ googleJavaFormat {
 
 dependencies {
     api("io.dropwizard.metrics:metrics-core:4.1.0")
-    api("com.newrelic.telemetry:telemetry:0.2.1")
+    api("com.newrelic.telemetry:telemetry:0.3.0")
 
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.4.2")
     testImplementation("org.junit.jupiter:junit-jupiter-api:5.4.2")
