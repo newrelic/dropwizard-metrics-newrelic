@@ -50,6 +50,12 @@ public class NewRelicReporter extends ScheduledReporter {
   private final TimerTransformer timerTransformer;
   private final MetricRegistry registry;
 
+  static {
+    Package thisPackage = NewRelicReporter.class.getPackage();
+    implementationVersion =
+        Optional.ofNullable(thisPackage.getImplementationVersion()).orElse("Unknown Version");
+  }
+
   NewRelicReporter(
       TimeTracker timeTracker,
       MetricRegistry registry,
@@ -83,6 +89,7 @@ public class NewRelicReporter extends ScheduledReporter {
   @Override
   public synchronized void start(long initialDelay, long period, TimeUnit unit) {
     allMetricTransformers().forEach(registry::addListener);
+    LOG.info("New Relic Reporter " + implementationVersion + " is starting");
     super.start(initialDelay, period, unit);
   }
 
