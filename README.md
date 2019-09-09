@@ -19,16 +19,16 @@ implementation("com.newrelic.telemetry:dropwizard-metrics-newrelic:0.1.1")
 implementation("com.newrelic.telemetry:telemetry-http-okhttp:0.3.0")
 ```
 
-If you do not want to depend on okhttps, you can remove the dependency on `telemetry-http-okhttps`, 
+If you do not want to depend on okhttp, you can remove the dependency on `telemetry-http-okhttp`, 
 but you will need to construct a `MetricBatchSender` instance using its builder and provide your
-own implementations of the `com.newrelic.telemetry.http.HttpPoster` interface.
+own implementation of the `com.newrelic.telemetry.http.HttpPoster` interface.
 
 
 ```
 MetricBatchSender sender = MetricBatchSender.builder().httpPoster(<your implementation>);
 ```
 
-Note: to use the sample code below, you will need the `telemetry-http-okhttps` library mentioned above. It provides
+Note: to use the sample code below, you will need the `telemetry-http-okhttp` library mentioned above. It provides
 implementations communicating via HTTP using the okhttp libraries, respectively.
 
 ## start the reporter
