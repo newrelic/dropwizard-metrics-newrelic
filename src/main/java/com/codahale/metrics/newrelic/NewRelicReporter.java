@@ -84,7 +84,7 @@ public class NewRelicReporter extends ScheduledReporter {
     this.commonAttributes = commonAttributes == null ? new Attributes() : commonAttributes.copy();
     this.commonAttributes.put("instrumentation.provider", "dropwizard");
     this.commonAttributes.put("collector.name", "dropwizard-metrics-newrelic");
-    this.commonAttributes.put("collector.version", implementationVersion); 
+    this.commonAttributes.put("collector.version", implementationVersion);
 
     this.histogramTransformer = histogramTransformer;
     this.gaugeTransformer = gaugeTransformer;
