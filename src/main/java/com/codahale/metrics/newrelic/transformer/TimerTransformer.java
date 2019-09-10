@@ -9,6 +9,7 @@ package com.codahale.metrics.newrelic.transformer;
 
 import static java.util.stream.Collectors.toSet;
 
+import com.codahale.metrics.MetricAttribute;
 import com.codahale.metrics.Timer;
 import com.codahale.metrics.newrelic.transformer.interfaces.CountingTransformer;
 import com.codahale.metrics.newrelic.transformer.interfaces.MeteredTransformer;
@@ -17,6 +18,7 @@ import com.codahale.metrics.newrelic.util.TimeTracker;
 import com.newrelic.telemetry.Attributes;
 import com.newrelic.telemetry.metrics.Metric;
 import java.util.Collection;
+import java.util.function.Predicate;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
 
@@ -30,10 +32,13 @@ public class TimerTransformer implements DropWizardMetricTransformer<Timer> {
   private final CountingTransformer countingTransformer;
 
   public static TimerTransformer build(
-      TimeTracker timeTracker, long rateFactor, double scaleFactor) {
+      TimeTracker timeTracker,
+      long rateFactor,
+      double scaleFactor,
+      Predicate<MetricAttribute> metricAttributePredicate) {
     return new TimerTransformer(
         new SamplingTransformer(timeTracker, scaleFactor),
-        new MeteredTransformer(rateFactor),
+        new MeteredTransformer(rateFactor, metricAttributePredicate),
         new CountingTransformer(timeTracker));
   }
 

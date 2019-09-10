@@ -14,6 +14,7 @@ import com.codahale.metrics.Counter;
 import com.codahale.metrics.Gauge;
 import com.codahale.metrics.Histogram;
 import com.codahale.metrics.Meter;
+import com.codahale.metrics.MetricAttribute;
 import com.codahale.metrics.MetricFilter;
 import com.codahale.metrics.MetricRegistry;
 import com.codahale.metrics.ScheduledReporter;
@@ -34,6 +35,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 import java.util.SortedMap;
 import java.util.concurrent.TimeUnit;
 import java.util.function.BiFunction;
@@ -75,8 +77,9 @@ public class NewRelicReporter extends ScheduledReporter {
       GaugeTransformer gaugeTransformer,
       CounterTransformer counterTransformer,
       MeterTransformer meterTransformer,
-      TimerTransformer timerTransformer) {
-    super(registry, name, filter, rateUnit, durationUnit);
+      TimerTransformer timerTransformer,
+      Set<MetricAttribute> disabledMetricAttributes) {
+    super(registry, name, filter, rateUnit, durationUnit, null, true, disabledMetricAttributes);
     this.registry = registry;
     this.timeTracker = timeTracker;
     this.sender = sender;

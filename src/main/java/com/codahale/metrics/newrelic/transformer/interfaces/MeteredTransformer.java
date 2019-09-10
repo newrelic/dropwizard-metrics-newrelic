@@ -16,6 +16,8 @@ import com.newrelic.telemetry.Attributes;
 import com.newrelic.telemetry.metrics.Gauge;
 import com.newrelic.telemetry.metrics.Metric;
 import java.util.Collection;
+import java.util.Objects;
+import java.util.function.Predicate;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
 
@@ -23,15 +25,18 @@ public class MeteredTransformer implements DropWizardComponentTransformer<Metere
 
   private final Clock clock;
   private final long rateFactor;
+  private final Predicate<MetricAttribute> metricAttributePredicate;
 
-  public MeteredTransformer(long rateFactor) {
-    this(Clock.defaultClock(), rateFactor);
+  public MeteredTransformer(long rateFactor, Predicate<MetricAttribute> metricAttributePredicate) {
+    this(Clock.defaultClock(), rateFactor, metricAttributePredicate);
   }
 
   // exists for testing
-  MeteredTransformer(Clock clock, long rateFactor) {
+  MeteredTransformer(
+      Clock clock, long rateFactor, Predicate<MetricAttribute> metricAttributePredicate) {
     this.clock = clock;
     this.rateFactor = rateFactor;
+    this.metricAttributePredicate = metricAttributePredicate;
   }
 
   @Override
@@ -69,7 +74,9 @@ public class MeteredTransformer implements DropWizardComponentTransformer<Metere
             MetricAttribute.M15_RATE,
             baseAttributes);
 
-    return Stream.of(mean, oneMinuteRate, fiveMinuteRate, fifteenMinuteRate).collect(toSet());
+    return Stream.of(mean, oneMinuteRate, fiveMinuteRate, fifteenMinuteRate)
+        .filter(Objects::nonNull)
+        .collect(toSet());
   }
 
   private double convertRate(double meanRate) {
@@ -82,6 +89,9 @@ public class MeteredTransformer implements DropWizardComponentTransformer<Metere
       double count,
       MetricAttribute attribute,
       Supplier<Attributes> attributes) {
+    if (!metricAttributePredicate.test(attribute)) {
+      return null;
+    }
     return new Gauge(name, count, timestamp, attributes.get().put("rate", attribute.getCode()));
   }
 }
