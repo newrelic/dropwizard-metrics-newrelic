@@ -10,7 +10,7 @@ please visit [the exporter specs documentation repo](https://github.com/newrelic
 `build.gradle:`
 ```
 compile("com.newrelic.telemetry:dropwizard-metrics-newrelic:0.1.1")
-compile("com.newrelic.telemetry:telemetry-http-okhttp:0.3.0")
+compile("com.newrelic.telemetry:telemetry-http-okhttp:0.3.1")
 ```
 
 or if you're using kotlin build gradle...
@@ -18,7 +18,7 @@ or if you're using kotlin build gradle...
 `build.gradle.kts:`
 ```
 implementation("com.newrelic.telemetry:dropwizard-metrics-newrelic:0.1.1")
-implementation("com.newrelic.telemetry:telemetry-http-okhttp:0.3.0")
+implementation("com.newrelic.telemetry:telemetry-http-okhttp:0.3.1")
 ```
 
 If you do not want to depend on okhttp, you can remove the dependency on `telemetry-http-okhttp`, 
@@ -36,7 +36,9 @@ implementations communicating via HTTP using the okhttp libraries, respectively.
 ## Start The Reporter
 
 Early in the lifecycle of your application, you will want to create and
-start a `NewRelicReporter`, similar to this:
+start a `NewRelicReporter`. 
+
+The `YOUR_SECRET_API_KEY` is referring to your New Relic Event API insert key. For more information and how to obtain a key, [visit our docs](https://docs.newrelic.com/docs/insights/insights-data-sources/custom-data/send-custom-events-event-api#register).  
 
 ```
 MetricRegistry metricRegistry = new MetricRegistry(); // If you're already using dropwizard-metrics you may already have one of these.
