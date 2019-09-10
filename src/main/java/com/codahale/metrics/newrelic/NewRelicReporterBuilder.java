@@ -8,6 +8,7 @@
 package com.codahale.metrics.newrelic;
 
 import com.codahale.metrics.Clock;
+import com.codahale.metrics.MetricAttribute;
 import com.codahale.metrics.MetricFilter;
 import com.codahale.metrics.MetricRegistry;
 import com.codahale.metrics.newrelic.transformer.CounterTransformer;
@@ -19,7 +20,10 @@ import com.codahale.metrics.newrelic.util.TimeTracker;
 import com.newrelic.telemetry.Attributes;
 import com.newrelic.telemetry.TelemetryClient;
 import com.newrelic.telemetry.metrics.MetricBatchSender;
+import java.util.Collections;
+import java.util.Set;
 import java.util.concurrent.TimeUnit;
+import java.util.function.Predicate;
 
 public class NewRelicReporterBuilder {
 
@@ -30,6 +34,7 @@ public class NewRelicReporterBuilder {
   private TimeUnit rateUnit = TimeUnit.SECONDS;
   private TimeUnit durationUnit = TimeUnit.MILLISECONDS;
   private Attributes commonAttributes = new Attributes();
+  private Set<MetricAttribute> disabledMetricAttributes = Collections.emptySet();
 
   public static NewRelicReporterBuilder forRegistry(
       MetricRegistry registry, MetricBatchSender metricBatchSender) {
@@ -66,14 +71,23 @@ public class NewRelicReporterBuilder {
     return this;
   }
 
+  public NewRelicReporterBuilder disabledMetricAttributes(
+      Set<MetricAttribute> disabledMetricAttributes) {
+    this.disabledMetricAttributes = disabledMetricAttributes;
+    return this;
+  }
+
   public NewRelicReporter build() {
     long rateFactor = rateUnit.toSeconds(1);
     double durationFactor = durationUnit.toNanos(1);
+    Predicate<MetricAttribute> metricAttributePredicate =
+        attr -> !disabledMetricAttributes.contains(attr);
 
     TimeTracker timeTracker = new TimeTracker(Clock.defaultClock());
-    MeterTransformer meterTransformer = MeterTransformer.build(timeTracker, rateFactor);
+    MeterTransformer meterTransformer =
+        MeterTransformer.build(timeTracker, rateFactor, metricAttributePredicate);
     TimerTransformer timerTransformer =
-        TimerTransformer.build(timeTracker, rateFactor, durationFactor);
+        TimerTransformer.build(timeTracker, rateFactor, durationFactor, metricAttributePredicate);
     GaugeTransformer gaugeTransformer = new GaugeTransformer();
     CounterTransformer counterTransformer = new CounterTransformer();
     HistogramTransformer histogramTransformer = HistogramTransformer.build(timeTracker);
@@ -91,6 +105,7 @@ public class NewRelicReporterBuilder {
         gaugeTransformer,
         counterTransformer,
         meterTransformer,
-        timerTransformer);
+        timerTransformer,
+        disabledMetricAttributes);
   }
 }

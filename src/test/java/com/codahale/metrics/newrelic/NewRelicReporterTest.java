@@ -7,6 +7,7 @@
 
 package com.codahale.metrics.newrelic;
 
+import static java.util.Collections.emptySet;
 import static java.util.Collections.singleton;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
@@ -92,7 +93,8 @@ class NewRelicReporterTest {
             gaugeTransformer,
             counterTransformer,
             meterTransformer,
-            timerTransformer);
+            timerTransformer,
+            emptySet());
 
     testClass.report(
         testData.gauges(),
@@ -154,7 +156,8 @@ class NewRelicReporterTest {
             gaugeTransformer,
             counterTransformer,
             meterTransformer,
-            timerTransformer);
+            timerTransformer,
+            emptySet());
     testClass.start(100, TimeUnit.MILLISECONDS);
     verify(registry).addListener(histogramTransformer);
     verify(registry).addListener(gaugeTransformer);
@@ -180,7 +183,8 @@ class NewRelicReporterTest {
             gaugeTransformer,
             counterTransformer,
             meterTransformer,
-            timerTransformer);
+            timerTransformer,
+            emptySet());
     testClass.stop();
     verify(registry).removeListener(histogramTransformer);
     verify(registry).removeListener(gaugeTransformer);

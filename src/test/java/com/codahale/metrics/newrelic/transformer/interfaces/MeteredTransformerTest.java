@@ -31,39 +31,60 @@ import org.junit.jupiter.api.Test;
 class MeteredTransformerTest {
 
   private static final long timestamp = System.currentTimeMillis();
-  private Clock clock;
   private static final String METER_NAME = "Meatier";
+
+  private final Gauge mean =
+      new Gauge(METER_NAME + ".rates", 1000, timestamp, attributeTo(MEAN_RATE));
+  private final Gauge oneMinuteRate =
+      new Gauge(METER_NAME + ".rates", 2000, timestamp, attributeTo(M1_RATE));
+  private final Gauge fiveMinuteRate =
+      new Gauge(METER_NAME + ".rates", 3000, timestamp, attributeTo(M5_RATE));
+  private final Gauge fifteenMinuteRate =
+      new Gauge(METER_NAME + ".rates", 4000, timestamp, attributeTo(M15_RATE));
+  private final Supplier<Attributes> baseAttributes = Attributes::new;
+  private Clock clock;
+  private Meter meter;
 
   @BeforeEach
   void setUp() {
     clock = mock(Clock.class);
+    meter = mock(Meter.class);
     when(clock.getTime()).thenReturn(timestamp);
-  }
-
-  @Test
-  void testMeter() {
-    // Given
-    Supplier<Attributes> baseAttributes = Attributes::new;
-    Meter meter = mock(Meter.class);
     when(meter.getCount()).thenReturn(Long.valueOf(10));
     when(meter.getMeanRate()).thenReturn(100d);
     when(meter.getOneMinuteRate()).thenReturn(200d);
     when(meter.getFiveMinuteRate()).thenReturn(300d);
     when(meter.getFifteenMinuteRate()).thenReturn(400d);
+  }
 
+  @Test
+  void testMeter() {
+    // Given
     meter.mark();
     meter.mark(10);
-
-    Gauge mean = new Gauge(METER_NAME + ".rates", 1000, timestamp, attributeTo(MEAN_RATE));
-    Gauge oneMinuteRate = new Gauge(METER_NAME + ".rates", 2000, timestamp, attributeTo(M1_RATE));
-    Gauge fiveMinuteRate = new Gauge(METER_NAME + ".rates", 3000, timestamp, attributeTo(M5_RATE));
-    Gauge fifteenMinuteRate =
-        new Gauge(METER_NAME + ".rates", 4000, timestamp, attributeTo(M15_RATE));
 
     Collection<Metric> expectedMetrics =
         Stream.of(mean, oneMinuteRate, fiveMinuteRate, fifteenMinuteRate).collect(toSet());
 
-    MeteredTransformer converter = new MeteredTransformer(clock, 10L);
+    MeteredTransformer converter = new MeteredTransformer(clock, 10L, x -> true);
+
+    // When
+    Collection<Metric> newRelicMetrics = converter.transform(METER_NAME, meter, baseAttributes);
+
+    // Then
+    assertEquals(expectedMetrics, newRelicMetrics);
+  }
+
+  @Test
+  void testDisabledMetricAttributes() {
+    // Given
+    meter.mark();
+    meter.mark(10);
+
+    Collection<Metric> expectedMetrics = Stream.of(fifteenMinuteRate).collect(toSet());
+
+    // Only want the one M15_RATE
+    MeteredTransformer converter = new MeteredTransformer(clock, 10L, M15_RATE::equals);
 
     // When
     Collection<Metric> newRelicMetrics = converter.transform(METER_NAME, meter, baseAttributes);
