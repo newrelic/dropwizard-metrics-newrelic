@@ -9,7 +9,7 @@ please visit [the exporter specs documentation repo](https://github.com/newrelic
 
 `build.gradle:`
 ```
-compile("com.newrelic.telemetry:dropwizard-metrics-newrelic:0.1.1")
+compile("com.newrelic.telemetry:dropwizard-metrics-newrelic:0.2.0")
 compile("com.newrelic.telemetry:telemetry-http-okhttp:0.3.1")
 ```
 
@@ -17,7 +17,7 @@ or if you're using kotlin build gradle...
 
 `build.gradle.kts:`
 ```
-implementation("com.newrelic.telemetry:dropwizard-metrics-newrelic:0.1.1")
+implementation("com.newrelic.telemetry:dropwizard-metrics-newrelic:0.2.0")
 implementation("com.newrelic.telemetry:telemetry-http-okhttp:0.3.1")
 ```
 
