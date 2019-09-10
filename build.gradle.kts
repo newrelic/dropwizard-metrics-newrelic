@@ -36,6 +36,7 @@ dependencies {
     api("com.newrelic.telemetry:telemetry:0.3.0")
 
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.4.2")
+    testRuntimeOnly("org.slf4j:slf4j-simple:1.7.26")
     testImplementation("org.junit.jupiter:junit-jupiter-api:5.4.2")
     testImplementation("org.mockito:mockito-core:2.28.2")
 }

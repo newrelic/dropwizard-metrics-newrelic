@@ -33,12 +33,18 @@ import com.newrelic.telemetry.metrics.MetricBatchSender;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.SortedMap;
 import java.util.concurrent.TimeUnit;
 import java.util.function.BiFunction;
 import java.util.stream.Stream;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class NewRelicReporter extends ScheduledReporter {
+
+  private static final Logger LOG = LoggerFactory.getLogger(NewRelicReporter.class);
+  private static final String implementationVersion;
 
   private final TimeTracker timeTracker;
   private final TelemetryClient sender;
@@ -49,6 +55,12 @@ public class NewRelicReporter extends ScheduledReporter {
   private final MeterTransformer meterTransformer;
   private final TimerTransformer timerTransformer;
   private final MetricRegistry registry;
+
+  static {
+    Package thisPackage = NewRelicReporter.class.getPackage();
+    implementationVersion =
+        Optional.ofNullable(thisPackage.getImplementationVersion()).orElse("Unknown Version");
+  }
 
   NewRelicReporter(
       TimeTracker timeTracker,
@@ -83,6 +95,7 @@ public class NewRelicReporter extends ScheduledReporter {
   @Override
   public synchronized void start(long initialDelay, long period, TimeUnit unit) {
     allMetricTransformers().forEach(registry::addListener);
+    LOG.info("New Relic Reporter: Version " + implementationVersion + " is starting");
     super.start(initialDelay, period, unit);
   }
 
