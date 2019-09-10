@@ -95,7 +95,7 @@ public class NewRelicReporter extends ScheduledReporter {
   @Override
   public synchronized void start(long initialDelay, long period, TimeUnit unit) {
     allMetricTransformers().forEach(registry::addListener);
-    LOG.info("New Relic Reporter " + implementationVersion + " is starting");
+    LOG.info("New Relic Reporter: Version " + implementationVersion + " is starting");
     super.start(initialDelay, period, unit);
   }
 
