@@ -83,3 +83,12 @@ public class MyApplication extends Application<MyConfig> {
 ...
 }
 ``` 
+
+### Building
+CI builds are run on Azure Pipelines: 
+[![Build Status](https://dev.azure.com/NRAzurePipelines/Java%20CI/_apis/build/status/PR%20build%20for%20dropwizard%20metrics?branchName=master)](https://dev.azure.com/NRAzurePipelines/Java%20CI/_build/latest?definitionId=4&branchName=master)
+The project uses gradle 5 for building, and the gradle wrapper is provided.
+
+To compile, run the tests and build the jars:
+
+`$ ./gradlew build`
