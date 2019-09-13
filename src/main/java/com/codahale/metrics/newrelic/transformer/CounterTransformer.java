@@ -31,11 +31,6 @@ public class CounterTransformer implements DropWizardMetricTransformer<Counter> 
 
   @Override
   public Collection<Metric> transform(String name, Counter counter) {
-    return singleton(
-        new Gauge(
-            name,
-            counter.getCount(),
-            clock.getTime(),
-            new Attributes().put("source.type", "counter")));
+    return singleton(new Gauge(name, counter.getCount(), clock.getTime(), new Attributes()));
   }
 }
