@@ -23,8 +23,7 @@ import java.util.function.Supplier;
 
 public class MeterTransformer implements DropWizardMetricTransformer<Meter> {
 
-  static final Supplier<Attributes> BASE_ATTRIBUTES =
-      () -> new Attributes().put("source.type", "meter");
+  static final Supplier<Attributes> BASE_ATTRIBUTES = Attributes::new;
 
   private final MeteredTransformer meteredTransformer;
   private final CountingTransformer countingTransformer;
