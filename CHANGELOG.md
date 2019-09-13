@@ -7,6 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 - TBD
 
+## [0.2.1] - 2019-09-13
+- Changed: The `source.type` attribute is no longer added to generated metrics.
+
 ## [0.2.0] - 2019-09-10
 - Added : The capability to filter metric attributes
 - Changed: Sightly tweaked the metric and attribute naming schemes
