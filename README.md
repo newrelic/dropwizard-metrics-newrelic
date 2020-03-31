@@ -84,6 +84,30 @@ public class MyApplication extends Application<MyConfig> {
 }
 ``` 
 
+### Dropwizard Metrics Reporter
+
+If you have a dropwizard project and have at least `dropwizard-core` 0.7.X, 
+then you can perform the following steps to automatically report metrics to
+newrelic.
+
+Add the following to your `dropwizard` YAML config file.
+
+~~~yaml
+metrics:
+  frequency: 1 minute                       # Default is 1 second.
+  reporters:
+    - type: newrelic
+      apiKey: <YOUR_SECRET_API_KEY>
+      overrideUri:                          # Optional. Defaults to https://metric-api.newrelic.com/
+      disabledMetricAttributes:             # Optional. Defaults to (none)
+      commonAttributes:                     # Optional. Defaults to (none)
+      includes:                             # Optional. Defaults to (all).
+      excludes:                             # Optional. Defaults to (none).
+~~~
+
+Once your `dropwizard` application starts, your metrics should start appearing
+in Newrelic.
+
 ### Building
 CI builds are run on Azure Pipelines: 
 [![Build Status](https://dev.azure.com/NRAzurePipelines/Java%20CI/_apis/build/status/PR%20build%20for%20dropwizard%20metrics?branchName=master)](https://dev.azure.com/NRAzurePipelines/Java%20CI/_build/latest?definitionId=4&branchName=master)
