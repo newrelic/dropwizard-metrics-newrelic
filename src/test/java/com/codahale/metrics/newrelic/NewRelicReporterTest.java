@@ -9,16 +9,10 @@ package com.codahale.metrics.newrelic;
 
 import static java.util.Collections.emptySet;
 import static java.util.Collections.singleton;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 import com.codahale.metrics.MetricRegistry;
-import com.codahale.metrics.newrelic.transformer.CounterTransformer;
-import com.codahale.metrics.newrelic.transformer.GaugeTransformer;
-import com.codahale.metrics.newrelic.transformer.HistogramTransformer;
-import com.codahale.metrics.newrelic.transformer.MeterTransformer;
-import com.codahale.metrics.newrelic.transformer.TimerTransformer;
+import com.codahale.metrics.newrelic.transformer.*;
 import com.codahale.metrics.newrelic.util.TimeTracker;
 import com.newrelic.telemetry.Attributes;
 import com.newrelic.telemetry.TelemetryClient;
@@ -41,6 +35,7 @@ class NewRelicReporterTest {
   private CounterTransformer counterTransformer;
   private MeterTransformer meterTransformer;
   private TimerTransformer timerTransformer;
+  private MetricRegistry metricRegistry;
 
   @BeforeEach
   void setup() {
@@ -53,6 +48,7 @@ class NewRelicReporterTest {
     timerTransformer = mock(TimerTransformer.class);
     sender = mock(TelemetryClient.class);
     timeTracker = mock(TimeTracker.class);
+    metricRegistry = new MetricRegistry();
   }
 
   @Test
@@ -82,7 +78,7 @@ class NewRelicReporterTest {
     NewRelicReporter testClass =
         new NewRelicReporter(
             timeTracker,
-            null,
+            metricRegistry,
             "reporter",
             null,
             TimeUnit.DAYS,
