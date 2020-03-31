@@ -88,7 +88,7 @@ public class MyApplication extends Application<MyConfig> {
 
 If you have a dropwizard project and have at least `dropwizard-core` 0.7.X, 
 then you can perform the following steps to automatically report metrics to
-newrelic.
+New Relic.
 
 Add the following to your `dropwizard` YAML config file.
 
@@ -124,4 +124,3 @@ For tips on how to find and query your data, see [Find metric data](https://docs
 For general querying information, see:
 - [Query New Relic data](https://docs.newrelic.com/docs/using-new-relic/data/understand-data/query-new-relic-data)
 - [Intro to NRQL](https://docs.newrelic.com/docs/query-data/nrql-new-relic-query-language/getting-started/introduction-nrql)
-
