@@ -106,7 +106,7 @@ metrics:
 ~~~
 
 Once your `dropwizard` application starts, your metrics should start appearing
-in Newrelic.
+in New Relic.
 
 ### Building
 CI builds are run on Azure Pipelines: 
