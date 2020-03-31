@@ -41,6 +41,8 @@ dependencies {
     testRuntimeOnly("org.slf4j:slf4j-simple:1.7.26")
     testImplementation("org.junit.jupiter:junit-jupiter-api:5.4.2")
     testImplementation("org.mockito:mockito-core:2.28.2")
+    testImplementation("com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.9.9")
+    testImplementation("io.dropwizard:dropwizard-core:2.0.5")
 }
 
 val jar: Jar by tasks

@@ -1,0 +1,18 @@
+  frequency: 1 minute
+  reporters:
+    - type: newrelic
+      apiKey: testApiKey
+      overrideUri: 'http://example.com'
+      disabledMetricAttributes:
+        - 'P999'
+      commonAttributes:
+        - foo: bar
+          dessert: danish
+      includes:
+        - one
+        - two
+        - three
+      excludes:
+        - four
+        - five
+        - six

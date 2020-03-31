@@ -31,17 +31,21 @@ public class NewRelicReporterFactory extends BaseReporterFactory {
   @NotNull
   public ScheduledReporter build(final MetricRegistry registry) {
     final MetricBatchSenderBuilder metricBatchSender = SimpleMetricBatchSender.builder(apiKey);
-    if (overrideUri != null) {
-      final URI uri = URI.create(overrideUri);
-      try {
-        metricBatchSender.uriOverride(uri);
-      } catch (MalformedURLException t) {
-        throw new IllegalArgumentException(t.getMessage(), t);
-      }
-    }
+    handleUriOverride(metricBatchSender, overrideUri);
+    Attributes attributes = buildAttributes();
+    return NewRelicReporterBuilder.forRegistry(registry, metricBatchSender.build())
+        .durationUnit(getDurationUnit())
+        .rateUnit(getRateUnit())
+        .filter(getFilter())
+        .commonAttributes(attributes)
+        .disabledMetricAttributes(disabledMetricAttributes)
+        .build();
+  }
+
+  private Attributes buildAttributes() {
     final Attributes attributes = new Attributes();
     if (commonAttributes != null) {
-      for (final Map.Entry<String, Object> entry : commonAttributes.entrySet()) {
+      for (Map.Entry<String, Object> entry : commonAttributes.entrySet()) {
         if (entry.getValue() instanceof String)
           attributes.put(entry.getKey(), (String) entry.getValue());
         else if (entry.getValue() instanceof Number)
@@ -50,12 +54,17 @@ public class NewRelicReporterFactory extends BaseReporterFactory {
           attributes.put(entry.getKey(), (Boolean) entry.getValue());
       }
     }
-    return NewRelicReporterBuilder.forRegistry(registry, metricBatchSender.build())
-        .durationUnit(getDurationUnit())
-        .rateUnit(getRateUnit())
-        .filter(getFilter())
-        .commonAttributes(attributes)
-        .disabledMetricAttributes(disabledMetricAttributes)
-        .build();
+    return attributes;
+  }
+
+  private void handleUriOverride(MetricBatchSenderBuilder metricBatchSender, String overrideUri) {
+    if (overrideUri != null) {
+      URI uri = URI.create(overrideUri);
+      try {
+        metricBatchSender.uriOverride(uri);
+      } catch (MalformedURLException t) {
+        throw new IllegalArgumentException(t.getMessage(), t);
+      }
+    }
   }
 }
