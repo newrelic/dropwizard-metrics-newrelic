@@ -32,7 +32,7 @@ googleJavaFormat {
 }
 
 dependencies {
-    api("io.dropwizard.metrics:metrics-core:4.1.0")
+    api("io.dropwizard.metrics:metrics-core:4.1.5")
     api("com.newrelic.telemetry:telemetry:0.4.0")
     implementation("io.dropwizard:dropwizard-metrics:2.0.5")
     implementation("com.newrelic.telemetry:telemetry-http-okhttp:0.4.0")
