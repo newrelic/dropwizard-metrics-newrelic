@@ -108,7 +108,7 @@ metrics:
 Once your `dropwizard` application starts, your metrics should start appearing
 in New Relic.
 
-### [![Javadocs][javadoc-image]][javadoc-url]
+### Javadoc for this project can be found here: [![Javadocs][javadoc-image]][javadoc-url]
 
 ### Building
 CI builds are run on Azure Pipelines: 
