@@ -108,6 +108,8 @@ metrics:
 Once your `dropwizard` application starts, your metrics should start appearing
 in New Relic.
 
+### [![Javadocs][javadoc-image]][javadoc-url]
+
 ### Building
 CI builds are run on Azure Pipelines: 
 [![Build Status](https://dev.azure.com/NRAzurePipelines/Java%20CI/_apis/build/status/PR%20build%20for%20dropwizard%20metrics?branchName=master)](https://dev.azure.com/NRAzurePipelines/Java%20CI/_build/latest?definitionId=4&branchName=master)
@@ -151,3 +153,6 @@ Submit and merge a PR with the following:
   - Miscellaneous bug fixes and tweaks
   ```
 * Update the [Usage](#usage) example in the [README](README.md) with the newly released version (e.g. `implementation("com.newrelic.telemetry:dropwizard-metrics-newrelic:0.4.0")`).
+
+[javadoc-image]: https://www.javadoc.io/badge/com.newrelic.telemetry/dropwizard-metrics-newrelic.svg
+[javadoc-url]: https://www.javadoc.io/doc/com.newrelic.telemetry/dropwizard-metrics-newrelic
