@@ -7,23 +7,30 @@
 
 package com.codahale.metrics.newrelic;
 
-import static java.util.Collections.emptySet;
-import static java.util.Collections.singleton;
-import static org.mockito.Mockito.*;
-
 import com.codahale.metrics.MetricRegistry;
-import com.codahale.metrics.newrelic.transformer.*;
+import com.codahale.metrics.newrelic.transformer.CounterTransformer;
+import com.codahale.metrics.newrelic.transformer.GaugeTransformer;
+import com.codahale.metrics.newrelic.transformer.HistogramTransformer;
+import com.codahale.metrics.newrelic.transformer.MeterTransformer;
+import com.codahale.metrics.newrelic.transformer.TimerTransformer;
 import com.codahale.metrics.newrelic.util.TimeTracker;
 import com.newrelic.telemetry.Attributes;
 import com.newrelic.telemetry.TelemetryClient;
 import com.newrelic.telemetry.metrics.Gauge;
 import com.newrelic.telemetry.metrics.Metric;
 import com.newrelic.telemetry.metrics.MetricBatch;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.concurrent.TimeUnit;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+
+import static java.util.Collections.emptySet;
+import static java.util.Collections.singleton;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 class NewRelicReporterTest {
 
@@ -187,5 +194,27 @@ class NewRelicReporterTest {
     verify(registry).removeListener(meterTransformer);
     verify(registry).removeListener(timerTransformer);
     verify(registry).removeListener(counterTransformer);
+  }
+
+  @Test
+  void testCloseCallsShutdownOnTelemetryClient() {
+    NewRelicReporter testClass =
+        new NewRelicReporter(
+            null,
+            metricRegistry,
+            null,
+            null,
+            TimeUnit.SECONDS,
+            TimeUnit.MILLISECONDS,
+            sender,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            emptySet());
+    testClass.close();
+    verify(sender).shutdown();
   }
 }

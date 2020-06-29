@@ -7,9 +7,6 @@
 
 package com.codahale.metrics.newrelic;
 
-import static java.util.function.Function.identity;
-import static java.util.stream.Collectors.toList;
-
 import com.codahale.metrics.Counter;
 import com.codahale.metrics.Gauge;
 import com.codahale.metrics.Histogram;
@@ -31,6 +28,9 @@ import com.newrelic.telemetry.TelemetryClient;
 import com.newrelic.telemetry.metrics.Metric;
 import com.newrelic.telemetry.metrics.MetricBatch;
 import com.newrelic.telemetry.metrics.MetricBatchSender;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
@@ -40,8 +40,9 @@ import java.util.SortedMap;
 import java.util.concurrent.TimeUnit;
 import java.util.function.BiFunction;
 import java.util.stream.Stream;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+
+import static java.util.function.Function.identity;
+import static java.util.stream.Collectors.toList;
 
 public class NewRelicReporter extends ScheduledReporter {
 
@@ -140,6 +141,12 @@ public class NewRelicReporter extends ScheduledReporter {
     sender.sendBatch(new MetricBatch(metrics, commonAttributes));
     // set the previous harvest time in the tracker.
     timeTracker.tick();
+  }
+
+  @Override
+  public void close() {
+    super.close();
+    sender.shutdown();
   }
 
   private <T> Stream<Metric> transform(
