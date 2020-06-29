@@ -20,6 +20,7 @@ import com.codahale.metrics.newrelic.util.TimeTracker;
 import com.newrelic.telemetry.Attributes;
 import com.newrelic.telemetry.TelemetryClient;
 import com.newrelic.telemetry.metrics.MetricBatchSender;
+
 import java.util.Collections;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
@@ -99,7 +100,7 @@ public class NewRelicReporterBuilder {
         filter,
         rateUnit,
         durationUnit,
-        new TelemetryClient(metricBatchSender, null),
+        new TelemetryClient(metricBatchSender, null, null, null),
         commonAttributes,
         histogramTransformer,
         gaugeTransformer,
