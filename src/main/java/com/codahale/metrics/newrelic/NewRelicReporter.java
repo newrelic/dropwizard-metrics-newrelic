@@ -142,6 +142,12 @@ public class NewRelicReporter extends ScheduledReporter {
     timeTracker.tick();
   }
 
+  @Override
+  public void close() {
+    super.close();
+    sender.shutdown();
+  }
+
   private <T> Stream<Metric> transform(
       Map<String, T> metrics, BiFunction<String, T, Collection<Metric>> supplier) {
     return metrics
