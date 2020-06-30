@@ -99,7 +99,7 @@ public class NewRelicReporterBuilder {
         filter,
         rateUnit,
         durationUnit,
-        new TelemetryClient(metricBatchSender, null),
+        new TelemetryClient(metricBatchSender, null, null, null),
         commonAttributes,
         histogramTransformer,
         gaugeTransformer,

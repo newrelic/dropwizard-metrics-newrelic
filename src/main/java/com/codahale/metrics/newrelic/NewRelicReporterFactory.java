@@ -6,8 +6,10 @@ import com.codahale.metrics.ScheduledReporter;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.newrelic.telemetry.Attributes;
-import com.newrelic.telemetry.SimpleMetricBatchSender;
-import com.newrelic.telemetry.metrics.MetricBatchSenderBuilder;
+import com.newrelic.telemetry.MetricBatchSenderFactory;
+import com.newrelic.telemetry.OkHttpPoster;
+import com.newrelic.telemetry.SenderConfiguration;
+import com.newrelic.telemetry.metrics.MetricBatchSender;
 import io.dropwizard.metrics.BaseReporterFactory;
 import java.net.MalformedURLException;
 import java.net.URI;
@@ -30,15 +32,12 @@ public class NewRelicReporterFactory extends BaseReporterFactory {
   @Override
   @NotNull
   public ScheduledReporter build(final MetricRegistry registry) {
-    final MetricBatchSenderBuilder metricBatchSender = SimpleMetricBatchSender.builder(apiKey);
-    if (overrideUri != null) {
-      final URI uri = URI.create(overrideUri);
-      try {
-        metricBatchSender.uriOverride(uri);
-      } catch (MalformedURLException t) {
-        throw new IllegalArgumentException(t.getMessage(), t);
-      }
-    }
+    MetricBatchSenderFactory factory =
+        MetricBatchSenderFactory.fromHttpImplementation(OkHttpPoster::new);
+
+    SenderConfiguration.SenderConfigurationBuilder config = factory.configureWith(apiKey);
+    config = configureEndpoint(config);
+
     final Attributes attributes = new Attributes();
     if (commonAttributes != null) {
       for (final Map.Entry<String, Object> entry : commonAttributes.entrySet()) {
@@ -50,12 +49,30 @@ public class NewRelicReporterFactory extends BaseReporterFactory {
           attributes.put(entry.getKey(), (Boolean) entry.getValue());
       }
     }
-    return NewRelicReporterBuilder.forRegistry(registry, metricBatchSender.build())
+    MetricBatchSender metricBatchSender = MetricBatchSender.create(config.build());
+    return NewRelicReporterBuilder.forRegistry(registry, metricBatchSender)
         .durationUnit(getDurationUnit())
         .rateUnit(getRateUnit())
         .filter(getFilter())
         .commonAttributes(attributes)
         .disabledMetricAttributes(disabledMetricAttributes)
         .build();
+  }
+
+  private SenderConfiguration.SenderConfigurationBuilder configureEndpoint(
+      SenderConfiguration.SenderConfigurationBuilder config) {
+    if (overrideUri == null) {
+      return config;
+    }
+    final URI uri = URI.create(overrideUri);
+    try {
+      String path = uri.getPath();
+      if (path == null || path.isEmpty()) {
+        return config.endpoint(uri.getScheme(), uri.getHost(), uri.getPort());
+      }
+      return config.endpointWithPath(uri.toURL());
+    } catch (MalformedURLException t) {
+      throw new IllegalArgumentException(t.getMessage(), t);
+    }
   }
 }
