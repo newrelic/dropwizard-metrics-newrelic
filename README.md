@@ -10,7 +10,7 @@ please visit [the exporter specs documentation repo](https://github.com/newrelic
 `build.gradle:`
 ```
 compile("com.newrelic.telemetry:dropwizard-metrics-newrelic:0.5.0")
-compile("com.newrelic.telemetry:telemetry-http-okhttp:0.5.0")
+compile("com.newrelic.telemetry:telemetry-http-okhttp:0.6.1")
 ```
 
 or if you're using kotlin build gradle...
@@ -18,7 +18,7 @@ or if you're using kotlin build gradle...
 `build.gradle.kts:`
 ```
 implementation("com.newrelic.telemetry:dropwizard-metrics-newrelic:0.5.0")
-implementation("com.newrelic.telemetry:telemetry-http-okhttp:0.5.0")
+implementation("com.newrelic.telemetry:telemetry-http-okhttp:0.6.1")
 ```
 
 If you do not want to depend on okhttp, you can remove the dependency on `telemetry-http-okhttp`, 
