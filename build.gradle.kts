@@ -18,10 +18,8 @@ repositories {
 
 group = "com.newrelic.telemetry"
 // -Prelease=true will render a non-snapshot version
-// All other values (including unset) will render a snapshot version.
-val release: String? by project
-
-version = project.findProperty("releaseVersion") as String + if("true" == release) "" else "-SNAPSHOT"
+val isRelease = project.findProperty("release") == "true"
+version = project.findProperty("releaseVersion") as String + if(isRelease) "" else "-SNAPSHOT"
 
 tasks.withType<Test> {
     useJUnitPlatform()
@@ -65,8 +63,6 @@ configure<PublishingExtension> {
     publications {
         create<MavenPublication>("mavenJava") {
             from(components["java"])
-            artifact(tasks["sourcesJar"])
-            artifact(tasks["javadocJar"])
             pom {
                 name.set(project.name)
                 description.set("Implementation of a DropWizard metrics Reporter that sends data as dimensional metrics to New Relic")
@@ -97,12 +93,12 @@ configure<PublishingExtension> {
             if (useLocalSonatype) {
                 val releasesRepoUrl = uri("http://localhost:8081/repository/maven-releases/")
                 val snapshotsRepoUrl = uri("http://localhost:8081/repository/maven-snapshots/")
-                url = if (version.toString().endsWith("SNAPSHOT")) snapshotsRepoUrl else releasesRepoUrl
+                url = if (isRelease) releasesRepoUrl else snapshotsRepoUrl
             }
             else {
                 val releasesRepoUrl = uri("https://oss.sonatype.org/service/local/staging/deploy/maven2/")
                 val snapshotsRepoUrl = uri("https://oss.sonatype.org/content/repositories/snapshots/")
-                url = if (version.toString().endsWith("SNAPSHOT")) snapshotsRepoUrl else releasesRepoUrl
+                url = if (isRelease) releasesRepoUrl else snapshotsRepoUrl
                 configure<SigningExtension> {
                     sign(publications["mavenJava"])
                 }
@@ -115,7 +111,11 @@ configure<PublishingExtension> {
     }
 }
 
-// This makes it difficult to use modern Java and produce usable output.
-tasks.withType<GenerateModuleMetadata> {
-    enabled = false
+signing {
+    val signingKey: String? = System.getenv("SIGNING_KEY")
+    val signingKeyId: String? = System.getenv("SIGNING_KEY_ID")
+    val signingPassword: String? = System.getenv("SIGNING_PASSWORD")
+    useInMemoryPgpKeys(signingKeyId, signingKey, signingPassword)
+    sign(publishing.publications["mavenJava"])
 }
+

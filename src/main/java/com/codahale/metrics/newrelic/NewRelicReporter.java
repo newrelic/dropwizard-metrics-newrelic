@@ -150,9 +150,7 @@ public class NewRelicReporter extends ScheduledReporter {
 
   private <T> Stream<Metric> transform(
       Map<String, T> metrics, BiFunction<String, T, Collection<Metric>> supplier) {
-    return metrics
-        .entrySet()
-        .stream()
+    return metrics.entrySet().stream()
         .flatMap(entry -> supplier.apply(entry.getKey(), entry.getValue()).stream());
   }
 
