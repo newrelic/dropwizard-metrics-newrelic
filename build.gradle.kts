@@ -109,9 +109,9 @@ configure<PublishingExtension> {
 }
 
 signing {
-    val signingKey: String? = System.getenv("SIGNING_KEY")
-    val signingKeyId: String? = System.getenv("SIGNING_KEY_ID")
-    val signingPassword: String? = System.getenv("SIGNING_PASSWORD")
+    val signingKey: String? by project
+    val signingKeyId: String? by project
+    val signingPassword: String? by project
     useInMemoryPgpKeys(signingKeyId, signingKey, signingPassword)
     sign(publishing.publications["mavenJava"])
 }
