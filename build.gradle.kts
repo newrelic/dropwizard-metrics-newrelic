@@ -1,30 +1,31 @@
-
 buildscript {
     dependencies {
-        classpath("gradle.plugin.com.github.sherter.google-java-format:google-java-format-gradle-plugin:0.8")
-    }
-}
-
-allprojects {
-    group = "com.newrelic.telemetry"
-    version = project.findProperty("releaseVersion") as String
-    repositories {
-        mavenCentral()
-        maven(url = "https://oss.sonatype.org/content/repositories/snapshots")
-    }
-    tasks.withType<Test> {
-        useJUnitPlatform()
-        testLogging {
-            events("passed", "skipped", "failed")
-        }
+        classpath("gradle.plugin.com.github.sherter.google-java-format:google-java-format-gradle-plugin:0.9")
     }
 }
 
 plugins {
-    id("com.github.sherter.google-java-format") version "0.8"
+    id("com.github.sherter.google-java-format") version "0.9"
     `java-library`
     `maven-publish`
     signing
+}
+
+repositories {
+    mavenCentral()
+    maven(url = "https://oss.sonatype.org/content/repositories/snapshots")
+}
+
+group = "com.newrelic.telemetry"
+// -Prelease=true will render a non-snapshot version
+val isRelease = project.findProperty("release") == "true"
+version = project.findProperty("releaseVersion") as String + if(isRelease) "" else "-SNAPSHOT"
+
+tasks.withType<Test> {
+    useJUnitPlatform()
+    testLogging {
+        events("passed", "skipped", "failed")
+    }
 }
 
 googleJavaFormat {
@@ -49,29 +50,19 @@ jar.apply {
     manifest.attributes["Implementation-Vendor"] = "New Relic, Inc"
 }
 
-tasks {
-    val taskScope = this
-    val sources = sourceSets
-    val sourcesJar by creating(Jar::class) {
-        dependsOn(JavaPlugin.CLASSES_TASK_NAME)
-        archiveClassifier.set("sources")
-        from(sources.main.get().allSource)
-    }
-
-    val javadocJar by creating(Jar::class) {
-        dependsOn(JavaPlugin.JAVADOC_TASK_NAME)
-        archiveClassifier.set("javadoc")
-        from(taskScope.javadoc)
-    }
+java {
+    sourceCompatibility = JavaVersion.VERSION_1_8
+    targetCompatibility = JavaVersion.VERSION_1_8
+    withSourcesJar()
+    withJavadocJar()
 }
+
 val useLocalSonatype = project.properties["useLocalSonatype"] == "true"
 
 configure<PublishingExtension> {
     publications {
         create<MavenPublication>("mavenJava") {
             from(components["java"])
-            artifact(tasks["sourcesJar"])
-            artifact(tasks["javadocJar"])
             pom {
                 name.set(project.name)
                 description.set("Implementation of a DropWizard metrics Reporter that sends data as dimensional metrics to New Relic")
@@ -102,12 +93,12 @@ configure<PublishingExtension> {
             if (useLocalSonatype) {
                 val releasesRepoUrl = uri("http://localhost:8081/repository/maven-releases/")
                 val snapshotsRepoUrl = uri("http://localhost:8081/repository/maven-snapshots/")
-                url = if (version.toString().endsWith("SNAPSHOT")) snapshotsRepoUrl else releasesRepoUrl
+                url = if (isRelease) releasesRepoUrl else snapshotsRepoUrl
             }
             else {
                 val releasesRepoUrl = uri("https://oss.sonatype.org/service/local/staging/deploy/maven2/")
                 val snapshotsRepoUrl = uri("https://oss.sonatype.org/content/repositories/snapshots/")
-                url = if (version.toString().endsWith("SNAPSHOT")) snapshotsRepoUrl else releasesRepoUrl
+                url = if (isRelease) releasesRepoUrl else snapshotsRepoUrl
                 configure<SigningExtension> {
                     sign(publications["mavenJava"])
                 }
@@ -120,7 +111,11 @@ configure<PublishingExtension> {
     }
 }
 
-// This makes it difficult to use modern Java and produce usable output.
-tasks.withType<GenerateModuleMetadata> {
-    enabled = false
+signing {
+    val signingKey: String? = System.getenv("SIGNING_KEY")
+    val signingKeyId: String? = System.getenv("SIGNING_KEY_ID")
+    val signingPassword: String? = System.getenv("SIGNING_PASSWORD")
+    useInMemoryPgpKeys(signingKeyId, signingKey, signingPassword)
+    sign(publishing.publications["mavenJava"])
 }
+
