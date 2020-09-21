@@ -35,7 +35,7 @@ googleJavaFormat {
 dependencies {
     api("io.dropwizard.metrics:metrics-core:4.1.5")
     api("com.newrelic.telemetry:telemetry:0.6.1")
-    implementation("io.dropwizard:dropwizard-metrics:2.0.5")
+    implementation("io.dropwizard:dropwizard-metrics:2.0.13")
     implementation("com.newrelic.telemetry:telemetry-http-okhttp:0.6.1")
 
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.4.2")
@@ -99,9 +99,6 @@ configure<PublishingExtension> {
                 val releasesRepoUrl = uri("https://oss.sonatype.org/service/local/staging/deploy/maven2/")
                 val snapshotsRepoUrl = uri("https://oss.sonatype.org/content/repositories/snapshots/")
                 url = if (isRelease) releasesRepoUrl else snapshotsRepoUrl
-                configure<SigningExtension> {
-                    sign(publications["mavenJava"])
-                }
             }
             credentials {
                 username = project.properties["sonatypeUsername"] as String?
