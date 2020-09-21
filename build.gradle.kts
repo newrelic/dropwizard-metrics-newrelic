@@ -101,8 +101,8 @@ configure<PublishingExtension> {
                 url = if (isRelease) releasesRepoUrl else snapshotsRepoUrl
             }
             credentials {
-                username = project.properties["sonatypeUsername"] as String?
-                password = project.properties["sonatypePassword"] as String?
+                username = System.getenv("SONATYPE_USERNAME")
+                password = System.getenv("SONATYPE_PASSWORD")
             }
         }
     }
