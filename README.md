@@ -3,7 +3,7 @@ A [Dropwizard metrics](https://metrics.dropwizard.io/4.0.0/) reporter for sendin
 For the juicy details on how Dropwizard metrics are mapped to New Relic dimensional metrics,
 please visit [the exporter specs documentation repo](https://github.com/newrelic/exporter-specs/tree/master/dropwizard). 
 
-# How To Use
+# How To Use THIS THINGER
 
 ## gradle
 
