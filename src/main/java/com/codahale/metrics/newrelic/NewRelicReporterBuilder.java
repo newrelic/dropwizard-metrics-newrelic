@@ -16,6 +16,8 @@ import com.codahale.metrics.newrelic.transformer.GaugeTransformer;
 import com.codahale.metrics.newrelic.transformer.HistogramTransformer;
 import com.codahale.metrics.newrelic.transformer.MeterTransformer;
 import com.codahale.metrics.newrelic.transformer.TimerTransformer;
+import com.codahale.metrics.newrelic.transformer.customizer.MetricAttributesCustomizer;
+import com.codahale.metrics.newrelic.transformer.customizer.MetricNameCustomizer;
 import com.codahale.metrics.newrelic.util.TimeTracker;
 import com.newrelic.telemetry.Attributes;
 import com.newrelic.telemetry.TelemetryClient;
@@ -35,6 +37,8 @@ public class NewRelicReporterBuilder {
   private TimeUnit durationUnit = TimeUnit.MILLISECONDS;
   private Attributes commonAttributes = new Attributes();
   private Set<MetricAttribute> disabledMetricAttributes = Collections.emptySet();
+  private MetricNameCustomizer nameCustomizer = MetricNameCustomizer.DEFAULT;
+  private MetricAttributesCustomizer attributeCustomizer = MetricAttributesCustomizer.DEFAULT;
 
   public static NewRelicReporterBuilder forRegistry(
       MetricRegistry registry, MetricBatchSender metricBatchSender) {
@@ -77,6 +81,17 @@ public class NewRelicReporterBuilder {
     return this;
   }
 
+  public NewRelicReporterBuilder metricNameCustomizer(MetricNameCustomizer nameCustomizer) {
+    this.nameCustomizer = nameCustomizer;
+    return this;
+  }
+
+  public NewRelicReporterBuilder metricAttributeCustomizer(
+      MetricAttributesCustomizer attributeCustomizer) {
+    this.attributeCustomizer = attributeCustomizer;
+    return this;
+  }
+
   public NewRelicReporter build() {
     long rateFactor = rateUnit.toSeconds(1);
     double durationFactor = durationUnit.toNanos(1);
@@ -85,12 +100,21 @@ public class NewRelicReporterBuilder {
 
     TimeTracker timeTracker = new TimeTracker(Clock.defaultClock());
     MeterTransformer meterTransformer =
-        MeterTransformer.build(timeTracker, rateFactor, metricAttributePredicate);
+        MeterTransformer.build(
+            timeTracker, rateFactor, metricAttributePredicate, nameCustomizer, attributeCustomizer);
     TimerTransformer timerTransformer =
-        TimerTransformer.build(timeTracker, rateFactor, durationFactor, metricAttributePredicate);
-    GaugeTransformer gaugeTransformer = new GaugeTransformer();
-    CounterTransformer counterTransformer = new CounterTransformer();
-    HistogramTransformer histogramTransformer = HistogramTransformer.build(timeTracker);
+        TimerTransformer.build(
+            timeTracker,
+            rateFactor,
+            durationFactor,
+            metricAttributePredicate,
+            nameCustomizer,
+            attributeCustomizer);
+    GaugeTransformer gaugeTransformer = new GaugeTransformer(nameCustomizer, attributeCustomizer);
+    CounterTransformer counterTransformer =
+        new CounterTransformer(nameCustomizer, attributeCustomizer);
+    HistogramTransformer histogramTransformer =
+        HistogramTransformer.build(timeTracker, nameCustomizer, attributeCustomizer);
 
     return new NewRelicReporter(
         timeTracker,

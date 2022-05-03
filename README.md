@@ -59,6 +59,53 @@ NewRelicReporter reporter = NewRelicReporter.build(metricRegistry, metricBatchSe
         
 reporter.start(15, TimeUnit.SECONDS);
 ```
+## Customizing Reported Metrics
+If you would like to customize the way metric names or attributes are reported to New Relic, you will want to supply
+customizers to the `NewRelicReporterBuilder`.
+
+Consider metrics with tags encoded in their names, formatted like so: `"metricName[tag:value,othertag:othervalue]"`,
+you might set up a reporter to report the metric name as `metricName` and add merge of the key/value pairs in `name`
+with the `commonAttributes`. 
+
+```
+MetricRegistry metricRegistry = new MetricRegistry(); // If you're already using dropwizard-metrics you may already have one of these.
+...
+String apiKey = "<YOUR_SECRET_API_KEY>";
+MetricBatchSender metricBatchSender = MetricBatchSenderFactory
+                .fromHttpImplementation(OkHttpPoster::new)
+                .createBatchSender(apiKey);
+
+Attributes commonAttributes = new Attributes()
+            .put("host", InetAddress.getLocalHost().getHostName())
+            .put("appName", "Your Application Name Here")
+            .put("other", "any other common attributes you wish");
+
+MetricAttributeCustomizer mergeAttributesFromTaggedMetricName =
+    (name, metric, attributes) -> {
+      Attributes tagsAsAttributes = new Attributes();
+
+      // get a stream of each tag:value pair within the square brackets of name and add
+      // each pair to the tagsAsAttributes Attributes object
+      Stream.of(name.substring(name.indexOf('['), name.indexOf(']')).split(","))
+          .forEach(
+              str -> {
+                String[] keyValuePair = str.split(":");
+
+                tagsAsAttributes.put(keyValuePair[0], keyValuePair[1]);
+              });
+
+      return tagsAsAttributes.putAll(attributes);
+    };
+
+NewRelicReporter reporter = NewRelicReporter.build(metricRegistry, metricBatchSender)
+        .commonAttributes(commonAttributes)
+        // customizer to strip encoded tags from metric name
+        .metricNameCustomizer(name -> name.substring(0, name.indexOf('[')))
+        .metricAttributeCustomizer(mergeAttributesFromTaggedMetricName)
+        .build();
+
+reporter.start(15, TimeUnit.SECONDS);
+```
 
 ## Dropwizard integration
 
