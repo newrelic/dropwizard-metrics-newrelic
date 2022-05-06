@@ -46,7 +46,9 @@ The `YOUR_SECRET_API_KEY` is referring to your New Relic Event API insert key. F
 MetricRegistry metricRegistry = new MetricRegistry(); // If you're already using dropwizard-metrics you may already have one of these.
 ...
 String apiKey = "<YOUR_SECRET_API_KEY>";
-MetricBatchSender metricBatchSender = SimpleMetricBatchSender.builder(apiKey).build();
+MetricBatchSender metricBatchSender = MetricBatchSenderFactory
+                .fromHttpImplementation(OkHttpPoster::new)
+                .createBatchSender(apiKey);
 
 Attributes commonAttributes = new Attributes()
             .put("host", InetAddress.getLocalHost().getHostName())
