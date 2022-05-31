@@ -66,11 +66,7 @@ public class NewRelicReporterFactory extends BaseReporterFactory {
     }
     final URI uri = URI.create(overrideUri);
     try {
-      String path = uri.getPath();
-      if (path == null || path.isEmpty()) {
-        return config.endpoint(uri.getScheme(), uri.getHost(), uri.getPort());
-      }
-      return config.endpointWithPath(uri.toURL());
+      return config.endpoint(uri.toURL());
     } catch (MalformedURLException t) {
       throw new IllegalArgumentException(t.getMessage(), t);
     }
