@@ -2,6 +2,7 @@
 
 # New Relic Dropwizard reporter
 A [Dropwizard metrics](https://metrics.dropwizard.io/4.0.0/) reporter for sending dimensional metrics to New Relic using the New Relic Java Telemetry SDK.
+
 For the juicy details on how Dropwizard metrics are mapped to New Relic dimensional metrics,
 please visit [the exporter specs documentation repo](https://github.com/newrelic/exporter-specs/tree/master/dropwizard). 
 
@@ -9,24 +10,17 @@ please visit [the exporter specs documentation repo](https://github.com/newrelic
 
 ## gradle
 
-`build.gradle:`
-```
-compile("com.newrelic.telemetry:dropwizard-metrics-newrelic:0.5.0")
-compile("com.newrelic.telemetry:telemetry-http-okhttp:0.6.1")
-```
+Add required `build.gradle` dependencies to your project:
 
-or if you're using kotlin build gradle...
-
-`build.gradle.kts:`
 ```
-implementation("com.newrelic.telemetry:dropwizard-metrics-newrelic:0.5.0")
-implementation("com.newrelic.telemetry:telemetry-http-okhttp:0.6.1")
+implementation("com.newrelic.telemetry:dropwizard-metrics-newrelic:0.6.0")
+implementation("com.newrelic.telemetry:telemetry-core:0.13.2")
+implementation("com.newrelic.telemetry:telemetry-http-okhttp:0.13.2")
 ```
 
 If you do not want to depend on okhttp, you can remove the dependency on `telemetry-http-okhttp`, 
 but you will need to construct a `MetricBatchSender` instance using its builder and provide your
 own implementation of the `com.newrelic.telemetry.http.HttpPoster` interface.
-
 
 ```
 MetricBatchSender sender = MetricBatchSender.builder().httpPoster(<your implementation>);
@@ -40,13 +34,26 @@ implementations communicating via HTTP using the okhttp libraries, respectively.
 Early in the lifecycle of your application, you will want to create and
 start a `NewRelicReporter`. 
 
-The `YOUR_SECRET_API_KEY` is referring to your New Relic Event API insert key. For more information and how to obtain a key, [visit our docs](https://docs.newrelic.com/docs/insights/insights-data-sources/custom-data/send-custom-events-event-api#register).  
+The `YOUR_SECRET_API_KEY` is referring to your New Relic Event API insert key or license key. 
+For more information and how to obtain a key, [visit our docs](https://docs.newrelic.com/docs/insights/insights-data-sources/custom-data/send-custom-events-event-api#register).
 
 ```
 MetricRegistry metricRegistry = new MetricRegistry(); // If you're already using dropwizard-metrics you may already have one of these.
 ...
-String apiKey = "<YOUR_SECRET_API_KEY>";
-MetricBatchSender metricBatchSender = SimpleMetricBatchSender.builder(apiKey).build();
+String apiKey = System.getenv("YOUR_SECRET_API_KEY");
+
+// For US region: https://metric-api.newrelic.com/metric/v1
+// For EU region: https://metric-api.eu.newrelic.com/metric/v1
+String ingestURI = System.getenv("METRIC_INGEST_URI");
+
+SenderConfiguration senderConfiguration = MetricBatchSender.configurationBuilder()
+        .apiKey(apiKey)
+        .useLicenseKey(true) // Optional if using a license key instead of an insert key
+        .endpoint(URI.create(ingestURI).toURL())
+        .httpPoster(new OkHttpPoster(Duration.ofSeconds(2)))
+        .build();
+
+MetricBatchSender metricBatchSender = MetricBatchSender.create(senderConfiguration);
 
 Attributes commonAttributes = new Attributes()
             .put("host", InetAddress.getLocalHost().getHostName())
@@ -111,12 +118,10 @@ Once your `dropwizard` application starts, your metrics should start appearing
 in New Relic.
 
 ### Javadoc for this project can be found here: [![Javadocs][javadoc-image]][javadoc-url]
+[javadoc-image]: https://www.javadoc.io/badge/com.newrelic.telemetry/dropwizard-metrics-newrelic.svg
+[javadoc-url]: https://www.javadoc.io/doc/com.newrelic.telemetry/dropwizard-metrics-newrelic
 
 ### Building
-CI builds are run on Azure Pipelines: 
-[![Build Status](https://dev.azure.com/NRAzurePipelines/Java%20CI/_apis/build/status/PR%20build%20for%20dropwizard%20metrics?branchName=main)](https://dev.azure.com/NRAzurePipelines/Java%20CI/_build/latest?definitionId=4&branchName=main)
-The project uses gradle 5 for building, and the gradle wrapper is provided.
-
 To compile, run the tests and build the jars:
 
 `$ ./gradlew build`
@@ -128,36 +133,6 @@ For tips on how to find and query your data, see [Find metric data](https://docs
 For general querying information, see:
 - [Query New Relic data](https://docs.newrelic.com/docs/using-new-relic/data/understand-data/query-new-relic-data)
 - [Intro to NRQL](https://docs.newrelic.com/docs/query-data/nrql-new-relic-query-language/getting-started/introduction-nrql)
-
-### Release Process
-
-#### Publish to Staging Repo
-
-To stage the release simply submit and merge a PR to update the [build.gradle.kts](build.gradle.kts) file with the version to be released (e.g. `version := "0.5.0"`).
-
-Results of the job can be viewed here: https://dev.azure.com/NRAzurePipelines/Java%20CI/_build
-After the staging release job has run successfully it will publish the new artifact to a staging repository on Sonatype at: https://oss.sonatype.org/#stagingRepositories.
-
-#### Manually Release Staging Repo
-
-1. Find the staging repo on Sonatype, which should be named similar to `comnewrelic-nnnn`, and validate that the contents and version look correct.
-2. If the contents look correct, select the staging repo and choose `close`, leaving a comment such as `releasing 0.5.0`.
-3. When the staging repo is finished closing, select the staging repo and choose `release`, keeping the `Automatically Drop` checkbox checked, and leave a comment such as `releasing 0.5.0`.
-4. Verify that the artifact was published on Maven Central at: https://repo1.maven.org/maven2/com/newrelic/telemetry/dropwizard-metrics-newrelic/
-
-#### Post Release
-
-Submit and merge a PR with the following:
-* Update the [build.gradle.kts](build.gradle.kts) file with to a snapshot version of a potential future release (e.g. `version  := "0.5.1-SNAPSHOT"`).
-* Update the [CHANGELOG](CHANGELOG.md) with details of the new release:
-  ```markdown
-  ## [0.5.0]
-  - Miscellaneous bug fixes and tweaks
-  ```
-* Update the [Usage](#usage) example in the [README](README.md) with the newly released version (e.g. `implementation("com.newrelic.telemetry:dropwizard-metrics-newrelic:0.4.0")`).
-
-[javadoc-image]: https://www.javadoc.io/badge/com.newrelic.telemetry/dropwizard-metrics-newrelic.svg
-[javadoc-url]: https://www.javadoc.io/doc/com.newrelic.telemetry/dropwizard-metrics-newrelic
 
 ## Support
 New Relic hosts and moderates an online forum where customers can interact with New Relic employees as well as other customers to get help and share best practices. Like all official New Relic open source projects, there's a related Community topic in the New Relic Explorers Hub. You can find this project's topic/threads here:
