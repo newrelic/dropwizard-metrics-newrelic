@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.6.0] - 2022-05-31
+- Update to telemetry SDK 0.13.2 and fix API breakage.
+- Clean up readme examples.
+
 ## [0.5.0] - 2020-06-30
 - Upgrade to Telemetry SDK 0.6.1
 - Allow URI override to include or omit the full endpoint path component.
