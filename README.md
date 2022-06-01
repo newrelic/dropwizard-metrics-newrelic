@@ -87,7 +87,7 @@ Attributes commonAttributes = new Attributes()
             .put("appName", "Your Application Name Here")
             .put("other", "any other common attributes you wish");
 
-MetricAttributeCustomizer mergeAttributesFromTaggedMetricName =
+MetricAttributesCustomizer mergeAttributesFromTaggedMetricName =
     (name, metric, attributes) -> {
       Attributes tagsAsAttributes = new Attributes();
 
