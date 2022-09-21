@@ -13,7 +13,7 @@ please visit [the exporter specs documentation repo](https://github.com/newrelic
 Add required `build.gradle` dependencies to your project:
 
 ```
-implementation("com.newrelic.telemetry:dropwizard-metrics-newrelic:0.7.0")
+implementation("com.newrelic.telemetry:dropwizard-metrics-newrelic:0.8.0")
 implementation("com.newrelic.telemetry:telemetry-core:0.15.0")
 implementation("com.newrelic.telemetry:telemetry-http-okhttp:0.15.0")
 ```
