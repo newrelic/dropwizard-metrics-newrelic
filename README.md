@@ -14,8 +14,8 @@ Add required `build.gradle` dependencies to your project:
 
 ```
 implementation("com.newrelic.telemetry:dropwizard-metrics-newrelic:0.7.0")
-implementation("com.newrelic.telemetry:telemetry-core:0.13.2")
-implementation("com.newrelic.telemetry:telemetry-http-okhttp:0.13.2")
+implementation("com.newrelic.telemetry:telemetry-core:0.15.0")
+implementation("com.newrelic.telemetry:telemetry-http-okhttp:0.15.0")
 ```
 
 If you do not want to depend on okhttp, you can remove the dependency on `telemetry-http-okhttp`, 
