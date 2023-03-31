@@ -33,9 +33,9 @@ googleJavaFormat {
 }
 
 dependencies {
-    api("io.dropwizard.metrics:metrics-core:4.2.9")
+    api("io.dropwizard.metrics:metrics-core:4.2.18")
     api("com.newrelic.telemetry:telemetry-core:0.15.0")
-    implementation("io.dropwizard:dropwizard-metrics:2.1.1")
+    implementation("io.dropwizard:dropwizard-metrics:4.0.0")
     implementation("com.newrelic.telemetry:telemetry-http-okhttp:0.15.0")
 
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.4.2")
@@ -51,8 +51,8 @@ jar.apply {
 }
 
 java {
-    sourceCompatibility = JavaVersion.VERSION_1_8
-    targetCompatibility = JavaVersion.VERSION_1_8
+    sourceCompatibility = JavaVersion.VERSION_11
+    targetCompatibility = JavaVersion.VERSION_11
     withSourcesJar()
     withJavadocJar()
 }
