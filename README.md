@@ -142,7 +142,7 @@ public class MyApplication extends Application<MyConfig> {
 
 ### Dropwizard Metrics Reporter
 
-If you have a dropwizard project and have at least `dropwizard-core` 1.1.0, 
+If you have a dropwizard project and have at least `dropwizard-core` 2.1.6, 
 then you can perform the following steps to automatically report metrics to
 New Relic.
 
