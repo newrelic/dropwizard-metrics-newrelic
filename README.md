@@ -13,7 +13,7 @@ please visit [the exporter specs documentation repo](https://github.com/newrelic
 Add required `build.gradle` dependencies to your project:
 
 ```
-implementation("com.newrelic.telemetry:dropwizard-metrics-newrelic:0.8.0")
+implementation("com.newrelic.telemetry:dropwizard-metrics-newrelic:0.9.0")
 implementation("com.newrelic.telemetry:telemetry-core:0.15.0")
 implementation("com.newrelic.telemetry:telemetry-http-okhttp:0.15.0")
 ```
@@ -142,7 +142,7 @@ public class MyApplication extends Application<MyConfig> {
 
 ### Dropwizard Metrics Reporter
 
-If you have a dropwizard project and have at least `dropwizard-core` 0.7.X, 
+If you have a dropwizard project and have at least `dropwizard-core` 1.1.X, 
 then you can perform the following steps to automatically report metrics to
 New Relic.
 
