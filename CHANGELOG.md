@@ -8,6 +8,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Update to io.dropwizard:dropwizard-metrics 4.0.0.
 - Breaking change: this version no longer supports any Java version below Java 11. 
 
+## [0.9.0] - 2023-05-09
+- Update to io.dropwizard:dropwizard-metrics 2.1.6.
+- Update to io.dropwizard.metrics:metrics-core 4.2.18.
+
 ## [0.8.0] - 2022-09-21
 - Update to telemetry SDK 0.15.0.
 
