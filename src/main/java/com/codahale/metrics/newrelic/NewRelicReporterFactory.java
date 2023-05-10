@@ -10,13 +10,13 @@ import com.newrelic.telemetry.MetricBatchSenderFactory;
 import com.newrelic.telemetry.OkHttpPoster;
 import com.newrelic.telemetry.SenderConfiguration;
 import com.newrelic.telemetry.metrics.MetricBatchSender;
-import io.dropwizard.metrics.BaseReporterFactory;
+import io.dropwizard.metrics.common.BaseReporterFactory;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
 import java.net.MalformedURLException;
 import java.net.URI;
 import java.util.EnumSet;
 import java.util.Map;
-import javax.validation.Valid;
-import javax.validation.constraints.NotNull;
 
 @JsonTypeName("newrelic")
 public class NewRelicReporterFactory extends BaseReporterFactory {
