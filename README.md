@@ -184,7 +184,7 @@ For general querying information, see:
 ## Support
 New Relic hosts and moderates an online forum where customers can interact with New Relic employees as well as other customers to get help and share best practices. Like all official New Relic open source projects, there's a related Community topic in the New Relic Explorers Hub. You can find this project's topic/threads here:
 
-https://discuss.newrelic.com/tags/javaagent
+[Java Agent Forum Topics](https://forum.newrelic.com/s/?c__categories=%5B%7B%22id%22%3A%22a6c8W000000EesiQAC%22%2C%22isCustomImage%22%3Afalse%2C%22sObjectType%22%3A%22Category__c%22%2C%22subtitle%22%3A%22%22%2C%22title%22%3A%22Java%20Agent%22%2C%22titleFormatted%22%3A%22%3Cstrong%3EJava%3C%2Fstrong%3E%20Agent%22%2C%22subtitleFormatted%22%3A%22%22%2C%22icon%22%3A%22standard%3Adefault%22%7D%5D)
 
 ### Contributing
 We encourage your contributions to improve the New Relic Dropwizard reporter! Keep in mind that when you submit your pull request, you'll need to sign the CLA via the click-through using CLA-Assistant. You only have to sign the CLA one time per project.
