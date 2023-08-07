@@ -1,4 +1,4 @@
-name: Snyk Scan
+name: Snyk Vulnerability Scan
 on:
   workflow_dispatch:
 jobs:
@@ -11,4 +11,5 @@ jobs:
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
         with:
-          args: --severity-threshold=high --all-sub-projects
+          command: test
+          args: --all-sub-projects
