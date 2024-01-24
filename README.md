@@ -63,7 +63,7 @@ reporter.start(15, TimeUnit.SECONDS);
 ```
 ## Constructing a MetricBatchSender without OkHttp
 
-Starting the reporter always requires constructing a `MetricBatchSender`. To build the sender, you must call `MetricBatchSender.configurationBuilder().httpPoster(<HttpPoster implementation>).build()`. 
+Starting the reporter always requires constructing a `MetricBatchSender`. To build the sender, call `MetricBatchSender.configurationBuilder().httpPoster(<HttpPoster implementation>).build()`. 
 
 The example above uses an `OkHttpPoster`, which is an implementation of `HttpPoster` included with `telemetry-http-okhttp`. If you wish to omit the dependency on okhttp, you
 will need to provide an alternate implementation of `HttpPoster`.
