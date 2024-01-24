@@ -19,12 +19,7 @@ implementation("com.newrelic.telemetry:telemetry-http-okhttp:0.15.0")
 ```
 
 If you do not want to depend on okhttp, you can remove the dependency on `telemetry-http-okhttp`, 
-but you will need to construct a `MetricBatchSender` instance using its builder and provide your
-own implementation of the `com.newrelic.telemetry.http.HttpPoster` interface.
-
-```
-MetricBatchSender sender = MetricBatchSender.builder().httpPoster(<your implementation>);
-```
+but you will still need to construct a `MetricBatchSender` instance using its builder and provide an alternate implementation of the `com.newrelic.telemetry.http.HttpPoster` interface. See [Constructing a MetricBatchSender without OkHttp](#constructing-a-metricbatchsender-without-okhttp) below for more information. 
 
 Note: to use the sample code below, you will need the `telemetry-http-okhttp` library mentioned above. It provides
 implementations communicating via HTTP using the okhttp libraries, respectively.
@@ -66,6 +61,23 @@ NewRelicReporter reporter = NewRelicReporter.build(metricRegistry, metricBatchSe
         
 reporter.start(15, TimeUnit.SECONDS);
 ```
+## Constructing a MetricBatchSender without OkHttp
+
+Starting the reporter always requires constructing a `MetricBatchSender`. To build the sender, you must call `MetricBatchSender.configurationBuilder().httpPoster(<HttpPoster implementation>).build()`. 
+
+The example above uses an `OkHttpPoster`, which is an implementation of `HttpPoster` included with `telemetry-http-okhttp`. If you wish to omit the dependency on okhttp, you
+will need to provide an alternate implementation of `HttpPoster`.
+
+One option is to use `Java11HttpPoster`, another New Relic-provided implementation available for projects running on Java 11+. To use, include the telemetry-http-java11 dependency in your project:
+```
+implementation("com.newrelic.telemetry:telemetry-http-java11:0.15.0")
+```
+then construct the sender:
+```
+MetricBatchSender.configurationBuilder().httpPoster(new Java11HttpPoster()).build()
+```
+Another option is to write your own [HttpPoster](https://github.com/newrelic/newrelic-telemetry-sdk-java/blob/main/telemetry-core/src/main/java/com/newrelic/telemetry/http/HttpPoster.java) implementation. The interface includes one method, `post`. You can reference the [OkHttpPoster](https://github.com/newrelic/newrelic-telemetry-sdk-java/blob/main/telemetry-http-okhttp/src/main/java/com/newrelic/telemetry/OkHttpPoster.java) and [Java11HttpPoster](https://github.com/newrelic/newrelic-telemetry-sdk-java/blob/main/telemetry-http-java11/src/main/java/com/newrelic/telemetry/Java11HttpPoster.java) source code for examples of how to implement the interface. Then construct the `MetricBatchSender` with your custom implementation, following the examples above.  
+
 ## Customizing Reported Metrics
 If you would like to customize the way metric names or attributes are reported to New Relic, you will want to supply
 customizers to the `NewRelicReporterBuilder`.
