@@ -32,6 +32,9 @@ start a `NewRelicReporter`.
 The `YOUR_SECRET_API_KEY` is referring to your New Relic Event API insert key or license key. 
 For more information and how to obtain a key, [visit our docs](https://docs.newrelic.com/docs/insights/insights-data-sources/custom-data/send-custom-events-event-api#register).
 
+The `METRIC_INGEST_URI` is the ingest endpoint for collected metrics. The default value will point to the US Production ingest endpoint. 
+For additional information on alternative ingest endpoints, [visit our docs](https://docs.newrelic.com/docs/apm/agents/java-agent/configuration/java-agent-configuration-config-file/#metric_ingest_uri).
+
 ```
 MetricRegistry metricRegistry = new MetricRegistry(); // If you're already using dropwizard-metrics you may already have one of these.
 ...
