@@ -27,7 +27,7 @@ implementations communicating via HTTP using the okhttp libraries, respectively.
 ## Start the reporter
 
 Early in the lifecycle of your application, you will want to create and
-start a `NewRelicReporter`. 
+start a `NewRelicReporter`. This should be created after the `MetricRegistry` is created and before any metrics have been generated.
 
 The `YOUR_SECRET_API_KEY` is referring to your New Relic Event API insert key or license key. 
 For more information and how to obtain a key, [visit our docs](https://docs.newrelic.com/docs/insights/insights-data-sources/custom-data/send-custom-events-event-api#register).
