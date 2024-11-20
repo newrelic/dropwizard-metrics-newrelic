@@ -4,9 +4,7 @@
 #
 # Purpose: It generates and submits a dependency graph to the GitHub Dependency Submission API. The graph is used to
 # trigger Dependabot Alerts for vulnerable dependencies, and to populate the Dependency Graph insights view in GitHub.
-#
-# Excludes:
-# - Test-only dependencies
+
 
 name: Dependency Submission
 
